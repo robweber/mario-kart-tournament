@@ -13,6 +13,6 @@
 <?php endif; ?>
 
 <ul>
-	<li>Users</li>
+	<li><?php echo $this->Html->link('Users','/admin/users') ?></li>
 </ul>
 

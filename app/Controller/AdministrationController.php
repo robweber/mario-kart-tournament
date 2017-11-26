@@ -33,6 +33,18 @@ class AdministrationController extends AppController {
 		$this->set('games',$games);
 	}
 
+	public function users(){
+		$drivers = $this->Driver->find('all',array('order'=>'Driver.name desc'));
+		$this->set('drivers',$drivers);
+	}
+
+	public function delete($userid){
+		$this->Driver->delete($userid);
+		$this->Session->setFlash('User Deleted');
+		
+		$this->redirect('/admin/users');
+	}
+
 	public function start(){
 		//start the tournament
 		$this->Setting->query('update settings set value = "true" where name = "tournament_active"');
