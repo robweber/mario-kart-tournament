@@ -310,8 +310,10 @@ form div.submit {
 }
 label {
 	display: block;
-	font-size: 110%;
 	margin-bottom:3px;
+	color: #e32;
+	font-size: 160%;
+	font-weight: bold;
 }
 input, textarea {
 	clear: both;
@@ -342,11 +344,11 @@ div.checkbox label {
 	display: inline;
 }
 input[type=radio] {
-	float:left;
-	width:auto;
+	width:100%;
 	margin: 6px 0;
 	padding: 0;
 	line-height: 26px;
+	
 }
 .radio label {
 	margin: 0 0 6px 20px;
