@@ -27,6 +27,7 @@
  */
 	Router::connect('/', array('controller' => 'tournaments', 'action' => 'home'));
 	Router::connect('/admin', array('controller' => 'administration'));
+	Router::connect('/admin/:action', array('controller' => 'administration'));
 	
 /**
  * Load all plugin routes. See the CakePlugin documentation on
