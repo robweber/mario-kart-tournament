@@ -92,7 +92,7 @@ class TournamentsController extends AppController {
 			
 			$this->Driver->save($driver);
 			
-			$this->_updateTournament();
+			$this->_updateTournament($driver['Driver']['games_played']);
 			
 			$this->Session->setFlash('Saved');
 		}
@@ -107,7 +107,7 @@ class TournamentsController extends AppController {
 		$this->redirect('/');
 	}
 	
-	public function _updateTournament(){
+	public function _updateTournament($round){
 		//check if there are any active users
 		$activeDrivers = $this->Driver->find('all',array('conditions'=>array('Driver.active'=>'true')));
 		
@@ -120,15 +120,21 @@ class TournamentsController extends AppController {
 			$cups = $this->Cup->find('all',array('conditions'=>array('Cup.game_id'=>$settings['active_game'])));
 			
 			//list drivers by games played
-			$drivers = $this->Driver->find('all',array('conditions'=>array('Driver.games_played < 2'),'order'=>'Driver.games_played asc'));
+			$drivers = $this->Driver->find('all',array('conditions'=>array('Driver.games_played < ' . $round),'order'=>'Driver.games_played asc'));
+			
+			if(count($drivers) == 0 && $round < 2)
+			{
+				$round = $round + 1;
+				
+				$drivers = $this->Driver->find('all',array('conditions'=>array('Driver.games_played < ' . $round),'order'=>'Driver.games_played asc'));
+			}
 			
 			if(count($drivers) >= 2)
 			{
-				$p1 = 0;
+				$p1 = rand(0,count($drivers)-1);
 				$p2 = $p1;
-		
-				//drivers should be in the same "round"
-				while($p2 == $p1 && $drivers[$p1]['Driver']['games_played'] == $drivers[$p2]['Driver']['games_played'])
+				
+				while($p2 == $p1)
 				{
 					$p2 = rand(0,count($drivers)-1);
 				}
@@ -144,6 +150,18 @@ class TournamentsController extends AppController {
 				
 				$this->Setting->query('update settings set value = ' . $player1['Driver']['id'] . ' where name = "player_1"');
 				$this->Setting->query('update settings set value = ' . $player2['Driver']['id'] . ' where name = "player_2"');
+				
+				//get a cup for them to play
+				$cup_id = rand(0,count($cups) - 1);
+			
+				while(($player1['Driver']['level'] == 0 || $player2['Driver']['level'] == 0) and $cups[$cup_id]['Cup']['level'] == 1)
+				{
+					//redraw
+					$cup_id = rand(0,count($cups) - 1);
+				}
+				
+				$this->Setting->query('update settings set value = "' . $cups[$cup_id]['Cup']['name'] . '" where name = "active_cup"');
+				
 			}
 			else if(count($drivers) == 1)
 			{
@@ -156,6 +174,17 @@ class TournamentsController extends AppController {
 				
 				$this->Setting->query('update settings set value = ' . $player1['Driver']['id'] . ' where name = "player_1"');
 				$this->Setting->query('update settings set value = -1 where name = "player_2"');
+				
+				//get a cup for them to play
+				$cup_id = rand(0,count($cups) - 1);
+			
+				while($player1['Driver']['level'] == 0 and $cups[$cup_id]['Cup']['level'] == 1)
+				{
+					//redraw
+					$cup_id = rand(0,count($cups) - 1);
+				}
+				
+				$this->Setting->query('update settings set value = "' . $cups[$cup_id]['Cup']['name'] . '" where name = "active_cup"');
 			}
 			else
 			{
@@ -163,9 +192,6 @@ class TournamentsController extends AppController {
 				$this->Setting->query('update settings set value = "true" where name = "game_over"');
 			}
 			
-			//get a cup for them to play
-			$cup_id = rand(0,count($cups) - 1);
-			$this->Setting->query('update settings set value = "' . $cups[$cup_id]['Cup']['name'] . '" where name = "active_cup"');
 		}
 	}
 
