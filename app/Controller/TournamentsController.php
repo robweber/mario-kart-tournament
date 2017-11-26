@@ -11,7 +11,7 @@ App::uses('AppController', 'Controller');
  * @link https://book.cakephp.org/2.0/en/controllers/pages-controller.html
  */
 class TournamentsController extends AppController {
-	public $uses = array('Driver','Setting');
+	public $uses = array('Driver','Setting','Cup');
 
 	public function login($id){
 		$this->Session->write('driver_id',$id);
@@ -57,6 +57,28 @@ class TournamentsController extends AppController {
 	public function driver(){
 		//load the driver
 		$driver = $this->Driver->find('first',array('conditions'=>array('Driver.id'=>$this->Session->read('driver_id'))));
+		
+		if($this->request->is('post'))
+		{
+			//save the score
+			$score = $this->data['Driver']['score'];
+			
+			if($driver['Driver']['level'] == 0)
+			{
+				$score = $score * 1.5;
+			}
+			
+			$driver['Driver']['games_played'] = $driver['Driver']['games_played'] + 1;
+			$driver['Driver']['score'] = $driver['Driver']['score'] + $score;
+			$driver['Driver']['active'] = 'false';
+			
+			$this->Driver->save($driver);
+			
+			$this->_updateTournament();
+			
+			$this->Session->setFlash('Saved');
+		}
+		
 		$this->set('driver',$driver);
 			
 	}
@@ -65,5 +87,37 @@ class TournamentsController extends AppController {
 		$this->Session->destroy();
 		
 		$this->redirect('/');
+	}
+	
+	public function _updateTournament(){
+		//check if there are any active users
+		$activeDrivers = $this->Driver->find('all',array('conditions'=>array('Driver.active'=>'true')));
+		
+		if(count($activeDrivers) == 0)
+		{
+			//we need to update the tournament
+			$settings = $this->Setting->find('list',array('fields'=>array('Setting.name','Setting.value')));
+		
+			//get a list of all the cups
+			$cups = $this->Cup->find('all',array('conditions'=>array('Cup.game_id'=>$settings['active_game'])));
+			
+			$drivers = $this->Driver->find('all',array('conditions'=>array('Driver.games_played < 2'),'order'=>'Driver.games_played desc'));
+			
+			$player1 = $drivers[0];
+			$player2 = $drivers[1];
+			
+			$player1['Driver']['active'] = 'true';
+			$player2['Driver']['active'] = 'true';
+			
+			$this->Driver->save($player1);
+			$this->Driver->save($player2);
+			
+			$this->Setting->query('update settings set value = ' . $player1['Driver']['id'] . ' where name = "player_1"');
+			$this->Setting->query('update settings set value = ' . $player2['Driver']['id'] . ' where name = "player_2"');
+			
+			//get a cup for them to play
+			$cup_id = rand(0,count($cups) - 1);
+			$this->Setting->query('update settings set value = "' . $cups[$cup_id]['Cup']['name'] . '" where name = "active_cup"');
+		}
 	}
 }
