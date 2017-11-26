@@ -11,7 +11,7 @@ App::uses('AppController', 'Controller');
  * @link https://book.cakephp.org/2.0/en/controllers/pages-controller.html
  */
 class AdministrationController extends AppController {
-	public $uses = array('Game','Setting');
+	public $uses = array('Game','Cup','Setting','Driver');
 
 	public function beforeRender(){
 		$settings = $this->Setting->find('list',array('fields'=>array('Setting.name','Setting.value')));
@@ -31,5 +31,54 @@ class AdministrationController extends AppController {
 		
 		$games = $this->Game->find('list',array('fields'=>array('Game.id','Game.name')));
 		$this->set('games',$games);
+	}
+
+	public function start(){
+		//start the tournament
+		$this->Setting->query('update settings set value = "true" where name = "tournament_active"');
+		
+		//update the drivers stats
+		$this->Setting->query('update drivers set games_played = 0');
+		$this->Setting->query('update drivers set active = "false"');
+		
+		//get the active game
+		$settings = $this->Setting->find('list',array('fields'=>array('Setting.name','Setting.value')));
+		
+		//get a list of all the cups
+		$cups = $this->Cup->find('all',array('conditions'=>array('Cup.game_id'=>$settings['active_game'])));
+		
+		//get the first two players
+		$drivers = $this->Driver->find('all');
+		
+		$player1 = $drivers[0];
+		$player2 = $drivers[1];
+		
+		$player1['Driver']['active'] = 'true';
+		$player2['Driver']['active'] = 'true';
+		
+		$this->Driver->save($player1);
+		$this->Driver->save($player2);
+		
+		$this->Setting->query('update settings set value = ' . $player1['Driver']['id'] . ' where name = "player_1"');
+		$this->Setting->query('update settings set value = ' . $player2['Driver']['id'] . ' where name = "player_2"');
+		
+		//get a cup for them to play
+		$cup_id = rand(0,count($cups) - 1);
+		$this->Setting->query('update settings set value = "' . $cups[$cup_id]['Cup']['name'] . '" where name = "active_cup"');
+		
+		$this->Session->setFlash("Tournament Started");
+		$this->redirect('/admin');
+	}
+
+	public function stop(){
+		//stop the tournament
+		$this->Setting->query('update settings set value = "false" where name = "tournament_active"');
+		
+		//update the drivers stats
+		$this->Setting->query('update drivers set games_played = 0');
+		$this->Setting->query('update drivers set active = "false"');
+		
+		$this->Session->setFlash("Tournament Stopped");
+		$this->redirect('/admin');
 	}
 }
