@@ -52,8 +52,16 @@ class AdministrationController extends AppController {
 		//get the first two players
 		$drivers = $this->Driver->find('all');
 		
-		$player1 = $drivers[0];
-		$player2 = $drivers[1];
+		$p1 = rand(0,count($drivers)-1);
+		$p2 = $p1;
+		
+		while($p2 == $p1)
+		{
+			$p2 = rand(0,count($drivers)-1);
+		}
+		
+		$player1 = $drivers[$p1];
+		$player2 = $drivers[$p2];
 		
 		$player1['Driver']['active'] = 'true';
 		$player2['Driver']['active'] = 'true';

@@ -119,12 +119,22 @@ class TournamentsController extends AppController {
 			//get a list of all the cups
 			$cups = $this->Cup->find('all',array('conditions'=>array('Cup.game_id'=>$settings['active_game'])));
 			
-			$drivers = $this->Driver->find('all',array('conditions'=>array('Driver.games_played < 2'),'order'=>'Driver.games_played desc'));
+			//list drivers by games played
+			$drivers = $this->Driver->find('all',array('conditions'=>array('Driver.games_played < 2'),'order'=>'Driver.games_played asc'));
 			
-			if(count($drivers) > 2)
+			if(count($drivers) >= 2)
 			{
-				$player1 = $drivers[0];
-				$player2 = $drivers[1];
+				$p1 = 0;
+				$p2 = $p1;
+		
+				//drivers should be in the same "round"
+				while($p2 == $p1 && $drivers[$p1]['Driver']['games_played'] == $drivers[$p2]['Driver']['games_played'])
+				{
+					$p2 = rand(0,count($drivers)-1);
+				}
+				
+				$player1 = $drivers[$p1];
+				$player2 = $drivers[$p2];
 				
 				$player1['Driver']['active'] = 'true';
 				$player2['Driver']['active'] = 'true';
