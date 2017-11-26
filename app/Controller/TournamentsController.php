@@ -55,6 +55,13 @@ class TournamentsController extends AppController {
 	}
 	
 	public function driver(){
+		
+		//check if logged in
+		if(!$this->Session->check('driver_id'))
+		{
+			$this->redirect('/');
+		}
+		
 		//load the driver
 		$driver = $this->Driver->find('first',array('conditions'=>array('Driver.id'=>$this->Session->read('driver_id'))));
 		
