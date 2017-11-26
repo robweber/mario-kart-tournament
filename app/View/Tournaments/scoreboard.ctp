@@ -6,7 +6,7 @@
 		<tr>
 			<td><h2 align="center"><?php echo $this->Html->image($player1['Driver']['image'])?><br><?php echo $player1['Driver']['name'] ?></h2></td>
 			<td valign="bottom"><h2 style="margin:50px">VS</h2></td>
-			<td><h2 align="center"><?php echo $this->Html->image($player2['Driver']['image'])?><br><?php echo $player2['Driver']['name'] ?></h2></td>
+			<td><h2 align="center"><?php if($player2 != null): ?><?php echo $this->Html->image($player2['Driver']['image'])?><br><?php echo $player2['Driver']['name'] ?> <?php else: ?> ? <?php endif; ?></h2></td>
 		</tr>
 		<tr>
 			<td colspan="3"><h2 align="center"><?php echo $settings['active_cup'] ?> Cup</h2></td>
