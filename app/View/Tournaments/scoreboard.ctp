@@ -1,6 +1,7 @@
 <?php if($settings['tournament_active'] == 'false'): ?>
 	<h2>Tournament hasn't started - create your driver!</h2>
 <?php else: ?>
+	<?php if($settings['game_over'] == 'false'): ?>
 	<table>
 		<tr>
 			<td><h2 align="center"><?php echo $this->Html->image($player1['Driver']['image'])?><br><?php echo $player1['Driver']['name'] ?></h2></td>
@@ -11,6 +12,9 @@
 			<td colspan="3"><h2 align="center"><?php echo $settings['active_cup'] ?> Cup</h2></td>
 		</tr>
 	</table>
+	<?php else: ?>
+		<h2>Tournament Over!</h2>
+	<?php endif; ?>
 <?php endif; ?>
 
 <table border="1" width="75%">

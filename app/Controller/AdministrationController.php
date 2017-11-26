@@ -36,6 +36,7 @@ class AdministrationController extends AppController {
 	public function start(){
 		//start the tournament
 		$this->Setting->query('update settings set value = "true" where name = "tournament_active"');
+		$this->Setting->query('update settings set value = "false" where name = "game_over"');
 		
 		//update the drivers stats
 		$this->Setting->query('update drivers set score = 0');

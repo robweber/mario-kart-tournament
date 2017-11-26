@@ -121,17 +121,37 @@ class TournamentsController extends AppController {
 			
 			$drivers = $this->Driver->find('all',array('conditions'=>array('Driver.games_played < 2'),'order'=>'Driver.games_played desc'));
 			
-			$player1 = $drivers[0];
-			$player2 = $drivers[1];
-			
-			$player1['Driver']['active'] = 'true';
-			$player2['Driver']['active'] = 'true';
-			
-			$this->Driver->save($player1);
-			$this->Driver->save($player2);
-			
-			$this->Setting->query('update settings set value = ' . $player1['Driver']['id'] . ' where name = "player_1"');
-			$this->Setting->query('update settings set value = ' . $player2['Driver']['id'] . ' where name = "player_2"');
+			if(count($drivers) > 2)
+			{
+				$player1 = $drivers[0];
+				$player2 = $drivers[1];
+				
+				$player1['Driver']['active'] = 'true';
+				$player2['Driver']['active'] = 'true';
+				
+				$this->Driver->save($player1);
+				$this->Driver->save($player2);
+				
+				$this->Setting->query('update settings set value = ' . $player1['Driver']['id'] . ' where name = "player_1"');
+				$this->Setting->query('update settings set value = ' . $player2['Driver']['id'] . ' where name = "player_2"');
+			}
+			else if(count($drivers) == 1)
+			{
+				//we have an odd number
+				$player1 = $drivers[0];
+				
+				$player1['Driver']['active'] = 'true';
+				
+				$this->Driver->save($player1);
+				
+				$this->Setting->query('update settings set value = ' . $player1['Driver']['id'] . ' where name = "player_1"');
+				$this->Setting->query('update settings set value = -1 where name = "player_2"');
+			}
+			else
+			{
+				//game over!
+				$this->Setting->query('update settings set value = "true" where name = "game_over"');
+			}
 			
 			//get a cup for them to play
 			$cup_id = rand(0,count($cups) - 1);
