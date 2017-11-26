@@ -38,6 +38,7 @@ class AdministrationController extends AppController {
 		$this->Setting->query('update settings set value = "true" where name = "tournament_active"');
 		
 		//update the drivers stats
+		$this->Setting->query('update drivers set score = 0');
 		$this->Setting->query('update drivers set games_played = 0');
 		$this->Setting->query('update drivers set active = "false"');
 		
@@ -77,6 +78,7 @@ class AdministrationController extends AppController {
 		//update the drivers stats
 		$this->Setting->query('update drivers set games_played = 0');
 		$this->Setting->query('update drivers set active = "false"');
+		$this->Setting->query('update drivers set score = 0');
 		
 		$this->Session->setFlash("Tournament Stopped");
 		$this->redirect('/admin');
