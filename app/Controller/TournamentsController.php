@@ -39,6 +39,17 @@ class TournamentsController extends AppController {
 		}
 	}
 	
+	public function scoreboard(){
+		$this->set('title_for_layout','Scoreboard');
+		$drivers = $this->Driver->find('all',array('order'=>'Driver.score desc'));
+		$this->set('drivers',$drivers);
+		
+		$settings = $this->Setting->find('list',array('fields'=>array('Setting.name','Setting.value')));
+		
+		$this->set('player1',$this->_findDriver($drivers, $settings['player_1']));
+		$this->set('player2',$this->_findDriver($drivers, $settings['player_2']));
+	}
+	
 	public function add_driver(){
 		$this->set('title_for_layout','Add Driver');
 		
@@ -126,5 +137,17 @@ class TournamentsController extends AppController {
 			$cup_id = rand(0,count($cups) - 1);
 			$this->Setting->query('update settings set value = "' . $cups[$cup_id]['Cup']['name'] . '" where name = "active_cup"');
 		}
+	}
+
+	public function _findDriver($drivers,$id){
+		
+		foreach($drivers as $driver){
+			
+			if($driver['Driver']['id'] == $id){
+				return $driver;
+			}
+		}
+
+		return null;
 	}
 }
