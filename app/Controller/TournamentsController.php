@@ -11,12 +11,16 @@ App::uses('AppController', 'Controller');
  * @link https://book.cakephp.org/2.0/en/controllers/pages-controller.html
  */
 class TournamentsController extends AppController {
-	public $uses = array('Driver');
-
+	public $uses = array('Driver','Setting');
 
 	public function login($id){
 		$this->Session->write('driver_id',$id);
 		$this->redirect('/tournaments/driver');
+	}
+
+	public function beforeFilter(){
+		$settings = $this->Setting->find('list',array('fields'=>array('Setting.name','Setting.value')));
+		$this->set('settings',$settings);
 	}
 
 	public function home() {

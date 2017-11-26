@@ -1,4 +1,8 @@
 
+<?php if($settings['tournament_active'] == 'false'): ?>
+	<h3><?php echo $this->Html->link('New Driver','/tournaments/add_driver') ?></h3>
+<?php endif; ?>
+
 <p>Login to enter your score: </p>
 <?php if(count($drivers) > 0): ?>
 	<?php foreach($drivers as $aDriver): ?>
@@ -8,5 +12,3 @@
 <?php else: ?>
 	<h3>There aren't any drivers - add one!</h3>
 <?php endif; ?>
-
-<?php echo $this->Html->link('New Driver','/tournaments/add_driver') ?>
