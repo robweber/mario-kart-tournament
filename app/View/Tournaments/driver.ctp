@@ -8,14 +8,10 @@
 <?php function findSkill($skill){
 	
 	if($skill == 0){
-		return 'Low - your score will be multiplied by 1.2';
-	}
-	else if($skill == 1)
-	{
-		return 'Medium - your score will be multiplied by 1.1';
+		return 'Normal - your score will be multiplied by 1.5';
 	}
 	else {
-		return 'High - Your score will not recieve a multiplier';
+		return 'Advanced - Your score will not recieve a multiplier';
 	}
 	
 }

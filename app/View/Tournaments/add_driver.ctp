@@ -2,7 +2,7 @@
 
 <?php echo $this->Form->input('name',array('label'=>'Name')) ?>
 
-<?php echo $this->Form->input('level',array('type'=>'radio','options'=>array(0=>'Low',1=>'Medium',2=>'High'),'legend'=>'Skill Level')); ?>
+<?php echo $this->Form->input('level',array('type'=>'radio','options'=>array(0=>'Normal',1=>'Advanced'),'legend'=>'Skill Level')); ?>
 
 <?php 
 $myOptions          = array();
