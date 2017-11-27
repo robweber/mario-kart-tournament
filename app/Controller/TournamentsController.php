@@ -87,25 +87,44 @@ class TournamentsController extends AppController {
 	public function update_score(){
 		if($this->request->is('post'))
 		{
+			//get the settings are current game information
+			$settings = $this->Setting->find('list',array('fields'=>array('Setting.name','Setting.value')));
+			$game = $this->Game->find('first',array('conditions'=>array('Game.id'=>$settings['active_game'])));
+			
 			$driver = $this->Driver->find('first',array('conditions'=>array('Driver.id'=>$this->Session->read('driver_id'))));
 			
 			//save the score
 			$score = $this->data['Driver']['score'];
 			
-			if($driver['Driver']['level'] == 0)
+			if($score <= $game['Game']['max_score'])
 			{
-				$score = $score * 1.5;
+				if($driver['Driver']['level'] == 0)
+				{
+					$score = $score * 1.5;
+					
+					//adjust score if too high
+					if($score > $game['Game']['max_score'])
+					{
+						$score = $game['Game']['max_score'];
+					}
+				}
+				
+				$driver['Driver']['games_played'] = $driver['Driver']['games_played'] + 1;
+				$driver['Driver']['score'] = $driver['Driver']['score'] + $score;
+				$driver['Driver']['active'] = 'false';
+				
+				$this->Driver->save($driver);
+				
+				$this->_updateTournament($driver['Driver']['games_played'],$settings);
+				
+				$this->Session->setFlash('Saved');
 			}
-			
-			$driver['Driver']['games_played'] = $driver['Driver']['games_played'] + 1;
-			$driver['Driver']['score'] = $driver['Driver']['score'] + $score;
-			$driver['Driver']['active'] = 'false';
-			
-			$this->Driver->save($driver);
-			
-			$this->_updateTournament($driver['Driver']['games_played']);
-			
-			$this->Session->setFlash('Saved');
+			else
+			{
+				//can't update the score
+				$this->Session->setFlash('Error - Score is too high');
+				
+			}
 		}
 		
 		$this->redirect('/tournaments/driver');
@@ -117,14 +136,13 @@ class TournamentsController extends AppController {
 		$this->redirect('/');
 	}
 	
-	public function _updateTournament($round){
+	public function _updateTournament($round,$settings){
 		//check if there are any active users
 		$activeDrivers = $this->Driver->find('all',array('conditions'=>array('Driver.active'=>'true')));
 		
 		if(count($activeDrivers) == 0)
 		{
 			//we need to update the tournament
-			$settings = $this->Setting->find('list',array('fields'=>array('Setting.name','Setting.value')));
 		
 			//get a list of all the cups
 			$cups = $this->Cup->find('all',array('conditions'=>array('Cup.game_id'=>$settings['active_game'])));
