@@ -154,7 +154,7 @@ class TournamentsController extends AppController {
 			//list drivers by games played
 			$drivers = $this->Driver->find('all',array('conditions'=>array('Driver.games_played < ' . $round),'order'=>'Driver.games_played asc'));
 			
-			if(count($drivers) == 0 && $round < 2)
+			if(count($drivers) == 0 && $round < $settings['total_rounds'])
 			{
 				$round = $round + 1;
 				

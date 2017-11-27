@@ -23,10 +23,14 @@ class AdministrationController extends AppController {
 		
 		if($this->request->is('post'))
 		{
-			$this->Session->setFlash('Active Game Updated');
+			$this->Session->setFlash('Settings Updated');
 			
 			//update the active game id
 			$this->Setting->query('update settings set value = ' . $this->data['ActiveGame']['ActiveGame']  . ' where name = "active_game"');
+			
+			//update the total number of rounds
+			$this->Setting->query('update settings set value = ' . $this->data['ActiveGame']['TotalRounds']  . ' where name = "total_rounds"');
+			
 		}
 		
 		$games = $this->Game->find('list',array('fields'=>array('Game.id','Game.name')));
