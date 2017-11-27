@@ -11,7 +11,7 @@ App::uses('AppController', 'Controller');
  * @link https://book.cakephp.org/2.0/en/controllers/pages-controller.html
  */
 class TournamentsController extends AppController {
-	public $uses = array('Driver','Setting','Cup');
+	public $uses = array('Driver','Setting','Cup','Game');
 
 	public function login($id){
 		$this->Session->write('driver_id',$id);
@@ -41,6 +41,8 @@ class TournamentsController extends AppController {
 	
 	public function scoreboard(){
 		$this->set('title_for_layout','Scoreboard');
+		
+		//get all the drivers
 		$drivers = $this->Driver->find('all',array('order'=>'Driver.score desc'));
 		$this->set('drivers',$drivers);
 		
@@ -48,6 +50,10 @@ class TournamentsController extends AppController {
 		
 		$this->set('player1',$this->_findDriver($drivers, $settings['player_1']));
 		$this->set('player2',$this->_findDriver($drivers, $settings['player_2']));
+		
+		//load the active game
+		$game = $this->Game->find('first',array('conditions'=>array('Game.id'=>$settings['active_game'])));
+		$this->set('game',$game);
 	}
 	
 	public function add_driver(){

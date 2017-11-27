@@ -1,3 +1,4 @@
+<h2><?php echo $game['Game']['name'] ?> Tournament</h2>
 <?php if($settings['tournament_active'] == 'false'): ?>
 	<h2>Tournament hasn't started - create your driver!</h2>
 <?php else: ?>
