@@ -285,6 +285,7 @@ fieldset fieldset div {
 	clear: left;
 	margin: 0 20px;
 }
+
 form div {
 	clear: both;
 	margin-bottom: 1em;
@@ -398,6 +399,56 @@ form .error-message {
 	-o-box-shadow: none;
 	box-shadow: none;
 	text-shadow: none;
+}
+
+.avatar-selector input{
+    margin:0;padding:0;
+    -webkit-appearance:none;
+       -moz-appearance:none;
+            appearance:none;
+}
+
+.baby_daisy{background-image:url(../img/avatars/baby_daisy.jpg);}
+.baby_luigi{background-image:url(../img/avatars/baby_luigi.jpg);}
+.baby_mario{background-image:url(../img/avatars/baby_mario.jpg);}
+.baby_peach{background-image:url(../img/avatars/baby_peach.jpg);}
+.bowser{background-image:url(../img/avatars/bowser.jpg);}
+.daisy{background-image:url(../img/avatars/daisy.jpg);}
+.donkey{background-image:url(../img/avatars/donkey.jpg);}
+.koopa{background-image:url(../img/avatars/koopa.jpg);}
+.luigi{background-image:url(../img/avatars/luigi.jpg);}
+.mario{background-image:url(../img/avatars/mario.jpg);}
+.mario2{background-image:url(../img/avatars/mario2.jpg);}
+.peach{background-image:url(../img/avatars/peach.jpg);}
+.waluigi{background-image:url(../img/avatars/waluigi.jpg);}
+.wario{background-image:url(../img/avatars/wario.jpg);}
+.yoshi{background-image:url(../img/avatars/yoshi.jpg);}
+
+.avatar-selector input:active +.avatar{opacity: .9;}
+.avatar-selector input:checked +.avatar{
+    -webkit-filter: none;
+       -moz-filter: none;
+            filter: none;
+}
+
+.avatar{
+    cursor:pointer;
+    background-size:contain;
+    background-repeat:no-repeat;
+    display:inline-block;
+    width:100px;height:70px;
+    -webkit-transition: all 100ms ease-in;
+       -moz-transition: all 100ms ease-in;
+            transition: all 100ms ease-in;
+    -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+       -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+            filter: brightness(1.8) grayscale(1) opacity(.7);
+}
+
+.avatar:hover{
+    -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+       -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            filter: brightness(1.2) grayscale(.5) opacity(.9);
 }
 
 /** Notices and Errors **/

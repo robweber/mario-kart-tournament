@@ -2,28 +2,31 @@
 
 <?php echo $this->Form->input('name',array('label'=>'Name')) ?>
 
-<?php echo $this->Form->input('level',array('type'=>'radio','options'=>array(0=>'Normal',1=>'Advanced'),'legend'=>'Skill Level')); ?>
+<?php echo $this->Form->input('level',array('type'=>'radio','options'=>array(0=>'Normal',1=>'Advanced'),'value'=>'0','legend'=>'Skill Level')); ?>
 
 <?php 
-$myOptions          = array();
-$myOptions['avatars/baby_daisy.jpg'] = $this->Html->image('avatars/baby_daisy.jpg');
-$myOptions['avatars/baby_luigi.jpg'] = $this->Html->image('avatars/baby_luigi.jpg');
-$myOptions['avatars/baby_mario.jpg'] = $this->Html->image('avatars/baby_mario.jpg');
-$myOptions['avatars/baby_peach.jpg'] = $this->Html->image('avatars/baby_peach.jpg');
-$myOptions['avatars/bowser.jpg'] = $this->Html->image('avatars/bowser.jpg');
-$myOptions['avatars/daisy.jpg'] = $this->Html->image('avatars/daisy.jpg');
-$myOptions['avatars/donkey.jpg'] = $this->Html->image('avatars/donkey.jpg');
-$myOptions['avatars/koopa.jpg'] = $this->Html->image('avatars/koopa.jpg');
-$myOptions['avatars/luigi.jpg'] = $this->Html->image('avatars/luigi.jpg');
-$myOptions['avatars/mario.jpg'] = $this->Html->image('avatars/mario.jpg');
-$myOptions['avatars/mario2.jpg'] = $this->Html->image('avatars/mario2.jpg');
-$myOptions['avatars/peach.jpg'] = $this->Html->image('avatars/peach.jpg');
-$myOptions['avatars/waluigi.jpg'] = $this->Html->image('avatars/waluigi.jpg');
-$myOptions['avatars/wario.jpg'] = $this->Html->image('avatars/wario.jpg');
-$myOptions['avatars/yoshi.jpg'] = $this->Html->image('avatars/yoshi.jpg');
+$avatars  = array('baby_daisy','baby_luigi','baby_mario','baby_peach','bowser','daisy','donkey','koopa','luigi','mario','mario2','peach','waluigi','wario','yoshi');
 
-echo $this->Form->input('image', array('type' => 'radio', 'options' => $myOptions,  'legend' => 'Pick an Avatar')); 
+//echo $this->Form->input('image', array('type' => 'radio', 'options' => $myOptions,  'legend' => 'Pick an Avatar','class'=>'avatar')); 
 
 ?>
-
+<?php $mod = 0; ?>
+<fieldset class="avatar-selector">
+	<legend>Pick an Avatar</legend>
+	<table>
+	<?php foreach($avatars as $avatar): ?>
+		<?php if($mod % 2 == 0): ?>
+			<tr>
+		<?php endif; ?>
+		<td>
+			<input type="radio" name="data[Driver][image]" id="<?php echo $avatar ?>" value="avatars/<?php echo $avatar ?>.jpg"/>
+			<label class="avatar <?php echo $avatar ?>" for="<?php echo $avatar ?>"></label>
+		</td>
+		<?php if($mod % 2 == 1): ?>
+			</tr>
+		<?php endif; ?>
+		<?php $mod = $mod + 1 ?>
+	<?php endforeach; ?>
+	</table>
+</fieldset>
 <?php echo $this->Form->submit() ?>
