@@ -3,6 +3,7 @@
 	<?php echo $this->Form->create('ActiveGame') ?>
 	<?php echo $this->Form->input('ActiveGame',array('type'=>'select','options'=>$games,'selected'=>$settings['active_game'])); ?>
 	<?php echo $this->Form->input('TotalRounds',array('value'=>$settings['total_rounds'])) ?>
+	<?php echo $this->Form->input('Multiplier',array('value'=>$settings['score_multiplier'])) ?>
 	<?php echo $this->Form->end('Update'); ?>
 
 	<?php echo $this->Form->create('StartGame',array('url'=>'/admin/start')) ?>
@@ -10,6 +11,7 @@
 <?php else: ?>
 	<h3>Active Game: <?php echo $games[$settings['active_game']] ?></h3>
 	<h3>Total Rounds: <?php echo $settings['total_rounds'] ?></h3>
+	<h3>Score Multiplier: <?php echo $settings['score_multiplier'] ?></h3>
 	<?php echo $this->Form->create('StartGame',array('url'=>'/admin/stop')) ?>
 	<?php echo $this->Form->end('Stop Tournament') ?>
 <?php endif; ?>

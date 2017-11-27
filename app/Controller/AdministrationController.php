@@ -31,6 +31,9 @@ class AdministrationController extends AppController {
 			//update the total number of rounds
 			$this->Setting->query('update settings set value = ' . $this->data['ActiveGame']['TotalRounds']  . ' where name = "total_rounds"');
 			
+			//update the multiplier
+			$this->Setting->query('update settings set value = ' . $this->data['ActiveGame']['Multiplier']  . ' where name = "score_multiplier"');
+			
 		}
 		
 		$games = $this->Game->find('list',array('fields'=>array('Game.id','Game.name')));
