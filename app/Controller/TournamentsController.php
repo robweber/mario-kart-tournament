@@ -75,9 +75,14 @@ class TournamentsController extends AppController {
 		
 		//load the driver
 		$driver = $this->Driver->find('first',array('conditions'=>array('Driver.id'=>$this->Session->read('driver_id'))));
-		
+		$this->set('driver',$driver);
+	}
+	
+	public function update_score(){
 		if($this->request->is('post'))
 		{
+			$driver = $this->Driver->find('first',array('conditions'=>array('Driver.id'=>$this->Session->read('driver_id'))));
+			
 			//save the score
 			$score = $this->data['Driver']['score'];
 			
@@ -97,8 +102,7 @@ class TournamentsController extends AppController {
 			$this->Session->setFlash('Saved');
 		}
 		
-		$this->set('driver',$driver);
-			
+		$this->redirect('/tournaments/driver');
 	}
 	
 	public function logout(){

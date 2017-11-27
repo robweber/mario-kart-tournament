@@ -6,7 +6,7 @@
 <p>Your skill level is <?php echo findSkill($driver['Driver']['level']) ?></p>
 
 <?php if($driver['Driver']['active'] == 'true'): ?>
-	<?php echo $this->Form->create('Driver') ?>
+	<?php echo $this->Form->create('Driver',array('url'=>'/tournaments/update_score')) ?>
 	<?php echo $this->Form->hidden('current_score',array('value'=>$driver['Driver']['score'])) ?>
 	<?php echo $this->Form->input('score',array('label'=>'Enter Your Score')) ?>
 	<?php echo $this->Form->end('Submit') ?>
