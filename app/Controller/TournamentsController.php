@@ -136,6 +136,10 @@ class TournamentsController extends AppController {
 		$this->redirect('/');
 	}
 	
+	public function rules(){
+		$this->set('title_for_layout','Rules');
+	}
+	
 	public function _updateTournament($round,$settings){
 		//check if there are any active users
 		$activeDrivers = $this->Driver->find('all',array('conditions'=>array('Driver.active'=>'true')));

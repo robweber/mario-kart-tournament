@@ -30,7 +30,7 @@
 			</div>
 		</div>
 		<div id="footer">
-			<p><?php echo $this->Html->link('Scoreboard','/tournaments/scoreboard') ?> | <?php echo $this->Html->link('Logout','/tournaments/logout') ?> | Created by Rob Weber</p>
+			<p><?php echo $this->Html->link('Scoreboard','/tournaments/scoreboard') ?> | <?php echo $this->Html->link('Rules','/tournaments/rules') ?> | <?php echo $this->Html->link('Logout','/tournaments/logout') ?> | Created by Rob Weber</p>
 		</div>
 	</div>
 	<?php echo $this->element('sql_dump'); ?>
