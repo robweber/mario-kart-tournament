@@ -9,17 +9,24 @@
 	<?php
 		echo $this->Html->meta('icon');
 
-		echo $this->Html->css('cake.generic');
-
+		echo $this->Html->css('bootstrap.min');
+		echo $this->Html->css('jumbotron-narrow');
+		
+		echo $this->Html->script('jquery.1.12.4');
+		echo $this->Html->script('bootstrap.min');
+		
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
 		echo $this->fetch('script');
 	?>
 </head>
 <body>
-	<div id="container">
-		<div id="header">
-			<h1><?php echo $this->Html->link('Welcome to Mario Kart!', '/'); ?></h1>
+	<div class="container">
+		<div class="header clearfix">
+			<nav>
+				<?php echo $this->element('menu',array('controller'=>$this->params['controller'],'path'=>$this->request->params['action'])); ?>
+			</nav>
+			<h3 class="text-muted">Welcome to Mario Kart!</h3>
 		</div>
 		<div align="center">
 			<div id="content">
@@ -29,9 +36,9 @@
 				<?php echo $this->fetch('content'); ?>
 			</div>
 		</div>
-		<div id="footer">
-			<p><?php echo $this->Html->link('Scoreboard','/tournaments/scoreboard') ?> | <?php echo $this->Html->link('Rules','/tournaments/rules') ?> | <?php echo $this->Html->link('Logout','/tournaments/logout') ?> | Created by Rob Weber</p>
-		</div>
+		<footer class="footer">
+        	<p>Created By Rob Weber</p>
+      </footer>
 	</div>
 	<?php echo $this->element('sql_dump'); ?>
 </body>

@@ -122,7 +122,7 @@ class TournamentsController extends AppController {
 			else
 			{
 				//can't update the score
-				$this->Session->setFlash('Error - Score is too high');
+				$this->Session->setFlash('Error - Score is too high', 'default', array("class"=>"error"));
 				
 			}
 		}

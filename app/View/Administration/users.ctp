@@ -1,4 +1,4 @@
-<table width="75%" border="1">
+<table class="table table-striped table-hover">
 	<tr>
 		<td width="25%"></td>
 		<td><h3>Name</h3></td>
@@ -8,7 +8,7 @@
 	</tr>
 <?php foreach($drivers as $driver): ?>
 		<tr>
-			<td width="25%"><h3><?php echo $this->Html->image($driver['Driver']['image'],array('width'=>'50px','height'=>'50px'))?></h3></td>
+			<td><h3><?php echo $this->Html->image($driver['Driver']['image'],array('width'=>'50px','height'=>'50px'))?></h3></td>
 			<td><h3><?php echo $driver['Driver']['name']?></h3></td>
 			<td><h3><?php echo $driver['Driver']['level']?></h3></td>
 			<td><h3><?php echo $driver['Driver']['score']?></h3></td>
