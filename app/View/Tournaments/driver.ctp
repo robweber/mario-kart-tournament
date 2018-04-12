@@ -11,10 +11,6 @@
 	</div>
 </div>
 
-	
-
-<p>Your skill level is <?php echo findSkill($driver['Driver']['level'],$settings['score_multiplier']) ?></p>
-
 <?php if($driver['Driver']['active'] == 'true'): ?>
 	<?php echo $this->Form->create('Driver',array('url'=>'/tournaments/update_score')) ?>
 	<?php echo $this->Form->hidden('current_score',array('value'=>$driver['Driver']['score'])) ?>
@@ -29,16 +25,5 @@
 <?php endif; ?>
 
 <?php 
-
-function findSkill($skill,$mult){
-	
-	if($skill == 0){
-		return 'Normal - your score will be multiplied by ' . $mult;
-	}
-	else {
-		return 'Advanced - Your score will not recieve a multiplier';
-	}
-	
-}
 
 ?>

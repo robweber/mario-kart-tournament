@@ -5,11 +5,6 @@
 	<?php echo $this->Form->input('name',array('label'=>false,'div'=>false,'class'=>'form-control')) ?>
 </div>
 
-<div class="form-group">
-	<label for="name">Skill Level</label>
-	<?php echo $this->Form->input('level',array('label'=>false,'div'=>false,'class'=>'form-control','type'=>'radio','options'=>array(0=>'Normal',1=>'Advanced'),'value'=>'0','legend'=>false)); ?>
-</div>
-
 <?php 
 $avatars  = array('baby_daisy','baby_luigi','baby_mario','baby_peach','bowser','daisy','donkey','koopa','luigi','mario','mario2','peach','waluigi','wario','yoshi');
 ?>

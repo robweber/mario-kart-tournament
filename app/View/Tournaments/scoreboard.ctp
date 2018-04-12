@@ -15,7 +15,7 @@
 			</tr>
 		</table>
 		<?php else: ?>
-			<h2><?php echo $this->Html->image($drivers[0]['Driver']['image'])?><br><?php echo $drivers[0]['Driver']['name'] ?> is the Winner!</h2>
+			<h2><?php echo $this->Html->image($drivers[0]['Driver']['image'])?><br><br><?php echo $drivers[0]['Driver']['name'] ?> is the Winner!</h2>
 		<?php endif; ?>
 	<?php endif; ?>
 </div>

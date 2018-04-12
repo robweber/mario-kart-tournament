@@ -98,17 +98,6 @@ class TournamentsController extends AppController {
 			
 			if($score <= $game['Game']['max_score'])
 			{
-				if($driver['Driver']['level'] == 0 && $settings['score_multiplier'] != 0)
-				{
-					$score = $score * $settings['score_multiplier'];
-					
-					//adjust score if too high
-					if($score > $game['Game']['max_score'])
-					{
-						$score = $game['Game']['max_score'];
-					}
-				}
-				
 				$driver['Driver']['games_played'] = $driver['Driver']['games_played'] + 1;
 				$driver['Driver']['score'] = $driver['Driver']['score'] + $score;
 				$driver['Driver']['active'] = 'false';
