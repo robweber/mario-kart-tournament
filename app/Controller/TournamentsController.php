@@ -251,6 +251,8 @@ class TournamentsController extends AppController {
 			}
 			else
 			{
+				$currentMatch ++;
+				
 				//check for a bye
 				if($aMatch[0]['Match']['driver_id'] != -1)
 				{
@@ -261,8 +263,6 @@ class TournamentsController extends AppController {
 				{
 					$this->_updateMatch($aMatch[1]['Match']['driver_id'], $currentLevel, $currentMatch);
 				}
-				
-				$currentMatch ++;
 			}
 		}
 
