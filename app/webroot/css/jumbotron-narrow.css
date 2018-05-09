@@ -130,6 +130,9 @@ div.jQBracket .team div.label{
 .jumbotron {
   text-align: center;
   border-bottom: 1px solid #e5e5e5;
+  margin-bottom:10px;
+  padding-top:20px;
+  padding-bottom:20px;
 }
 .jumbotron .btn {
   padding: 14px 24px;
