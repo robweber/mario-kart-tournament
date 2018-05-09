@@ -6,7 +6,7 @@
 		</div>
 		<div class="col-lg-6">
 			<h2><?php echo $driver['Driver']['name'] ?></h2>
-			<h3>Current Score: <?php echo $driver['Driver']['score'] ?></h3>
+			<h3>Total Score: <?php echo $driver['Driver']['score'] ?></h3>
 		</div>
 	</div>
 </div>

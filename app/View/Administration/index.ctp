@@ -5,10 +5,6 @@
 		<label for="activeGame">Active Game</label>
 		<?php echo $this->Form->input('ActiveGame',array('label'=>false,'div'=>false,'class'=>'form-control','type'=>'select','options'=>$games,'selected'=>$settings['active_game'])); ?>
 	</div>
-	<div class="form-group">
-		<label for="activeGame">Total Rounds</label>
-		<?php echo $this->Form->input('TotalRounds',array('label'=>false,'div'=>false,'class'=>'form-control','value'=>$settings['total_rounds'])) ?>
-	</div>
 	
 	<div class="form-group">
 		<?php echo $this->Form->submit('Update',array('class'=>'btn btn-large btn-info')); ?>
@@ -23,7 +19,6 @@
 <?php else: ?>
 <div class="jumbotron">
 	<h3>Active Game: <?php echo $games[$settings['active_game']] ?></h3>
-	<h3>Total Rounds: <?php echo $settings['total_rounds'] ?></h3>
 	<?php echo $this->Form->create('StartGame',array('url'=>'/admin/stop')) ?>
 	<div class="form-group">
 		<?php echo $this->Form->submit('Stop Tournament',array("class"=>"btn btn-lg btn-danger")) ?>
