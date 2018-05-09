@@ -203,23 +203,12 @@ class TournamentsController extends AppController {
 				//game over!
 				$this->Setting->query('update settings set value = "true" where name = "game_over"');
 			}
-			/*
-			
 			
 			//get a cup for them to play
 			$cup_id = rand(0,count($cups) - 1);
-		
-			while(($player1['Driver']['level'] == 0 || $player2['Driver']['level'] == 0) and $cups[$cup_id]['Cup']['level'] == 1)
-			{
-				//redraw
-				$cup_id = rand(0,count($cups) - 1);
-			}
 			
 			$this->Setting->query('update settings set value = "' . $cups[$cup_id]['Cup']['name'] . '" where name = "active_cup"');
-				
-			
-			*/
-			
+
 		}
 	}
 
