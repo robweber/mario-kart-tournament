@@ -1,3 +1,24 @@
+<?php 
+	echo $this->Html->css('jquery.bracket.min');
+	echo $this->Html->script('jquery.bracket.min');
+?>
+<script type="text/javascript">
+$(function() {
+	
+	<?php if($settings['tournament_active'] == 'true'): ?> 
+	//load tournmanet bracket if active
+	$.get('/mario_kart/tournaments/bracket',function(data,status){
+		$('#tournament_bracket').bracket({
+      		init: JSON.parse(data), /* data to initialize the bracket with */ 
+      		teamWidth: 70,
+      		scoreWidth: 30,
+      		matchMargin: 50,
+      		roundMargin: 90,
+      	});
+	});
+	<?php endif; ?>
+  })
+</script>
 <div class="jumbotron">
 	<h2><?php echo $game['Game']['name'] ?> Tournament</h2>
 	<?php if($settings['tournament_active'] == 'false'): ?>
@@ -15,21 +36,20 @@
 			</tr>
 		</table>
 		<?php else: ?>
-			<h2><?php echo $this->Html->image($drivers[0]['Driver']['image'])?><br><br><?php echo $drivers[0]['Driver']['name'] ?> is the Winner!</h2>
+			<?php if($match[0]['Match']['score'] > $match[1]['Match']['score']): ?>
+				<?php $winner = $match[0]['Driver']; ?>
+			<?php else: ?>
+				<?php $winner = $match[1]['Driver']; ?>
+			<?php endif; ?>
+			<h2><?php echo $this->Html->image($winner['image'])?><br><br><?php echo $winner['name'] ?> is the Winner!</h2>
 		<?php endif; ?>
 	<?php endif; ?>
 </div>
-<table class="table table-striped">
-	<?php foreach($drivers as $driver): ?>
-		<tr>
-			<td><h3><?php echo $this->Html->image($driver['Driver']['image'],array('width'=>'50px','height'=>'50px'))?></h3></td>
-			<td><h3><?php echo $driver['Driver']['name']?></h3></td>
-			<td><h3><?php echo $driver['Driver']['score']?></h3></td>
-		</tr>
-	<?php endforeach; ?>
-</table>
+<div id="tournament_bracket" align="left">
+	
+</div>
 
 <script type="text/javascript">
-  var timeout = setTimeout("location.reload(true);",10000);
+ var timeout = setTimeout("location.reload(true);",10000);
 </script>
 

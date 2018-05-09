@@ -11,7 +11,7 @@ App::uses('AppController', 'Controller');
  * @link https://book.cakephp.org/2.0/en/controllers/pages-controller.html
  */
 class AdministrationController extends AppController {
-	public $uses = array('Game','Cup','Setting','Driver');
+	public $uses = array('Game','Cup','Setting','Driver','Match');
 
 	public function beforeRender(){
 		$settings = $this->Setting->find('list',array('fields'=>array('Setting.name','Setting.value')));
@@ -59,26 +59,124 @@ class AdministrationController extends AppController {
 		$this->Setting->query('update drivers set games_played = 0');
 		$this->Setting->query('update drivers set active = "false"');
 		
+		//delete the old bracket
+		$this->Match->query("truncate matches");
+		
 		//get the active game
 		$settings = $this->Setting->find('list',array('fields'=>array('Setting.name','Setting.value')));
+		
+		//figure out the seeds
+		$drivers = $this->Driver->find('all',array('order'=>'Driver.name DESC'));
+		$matchCount = count($drivers);
+
+		//first round players are a multiple of 4
+		while($matchCount % 4 != 0)
+		{
+			$matchCount ++;
+		}
+		
+		$topNext = True;
+		$gotTwo = False;
+		$topBracket = 1;
+		$bottomBracket = $matchCount/2; //equals total matches
+		$i = 0;
+		
+		//distribute the players in the bracket (alternate top/bottom)
+		while($i < $matchCount)
+		{
+			$match_num = -1;
+			if($topNext)
+			{
+				$match_num = $topBracket;
+				
+				if($gotTwo)
+				{
+					$topBracket ++;
+					$gotTwo = False;
+					$topNext = False;
+				}
+				else
+				{
+					//will be tru next time
+					$gotTwo = True;
+				}
+			}
+			else
+			{
+				$match_num = $bottomBracket;
+				
+				if($gotTwo)
+				{
+					$bottomBracket --;
+					$gotTwo = False;
+					$topNext = True;
+				}
+				else
+				{
+					//will be true nextTime
+					$gotTwo = True;		
+				}
+			}
+			
+			//use a real driver if we can
+			$driverId = -1;
+			if($i < count($drivers))
+			{
+				$driverId = $drivers[$i]['Driver']['id'];
+			}
+			
+			$this->Match->create();
+			$this->Match->set(array('driver_id'=>$driverId,'bracket_level'=>1,'match_num'=>$match_num));
+			$this->Match->save();
+			
+			$i ++;
+		}
+		
+		//create the rest of the matches (unknown drivers)
+		$gamesLeft = count($drivers);
+		$currentLevel = 1;
+		if($gamesLeft % 2 == 1)
+		{
+			//account for bye
+			$gamesLeft ++;	
+		}
+		
+		$gamesLeft = $gamesLeft/2;
+		while($gamesLeft > 1)
+		{
+			$currentLevel ++;
+			
+			if($gamesLeft % 2 == 1)
+			{
+				//account for bye
+				$gamesLeft ++;	
+			}
+			
+			for($i = 1; $i <= ($gamesLeft /2); $i++)
+			{
+				//make 2 for each match
+				
+				$this->Match->create();
+				$this->Match->set(array('driver_id'=>-1,'bracket_level'=>$currentLevel,'match_num'=>$i));
+				$this->Match->save();
+				
+				$this->Match->create();
+				$this->Match->set(array('driver_id'=>-1,'bracket_level'=>$currentLevel,'match_num'=>$i));
+				$this->Match->save();
+			}
+			
+			$gamesLeft = $gamesLeft /2;
+		}
+		
+		//get the first two drivers
+		$match1 = $this->Match->find('all',array('conditions'=>array('Match.bracket_level'=>1,'Match.match_num' => 1)));
+		$player1 = $match1[0];
+		$player2 = $match1[1];
 		
 		//get a list of all the cups
 		$cups = $this->Cup->find('all',array('conditions'=>array('Cup.game_id'=>$settings['active_game'])));
 		
-		//get the first two players
-		$drivers = $this->Driver->find('all');
-		
-		$p1 = rand(0,count($drivers)-1);
-		$p2 = $p1;
-		
-		while($p2 == $p1)
-		{
-			$p2 = rand(0,count($drivers)-1);
-		}
-		
-		$player1 = $drivers[$p1];
-		$player2 = $drivers[$p2];
-		
+		//set the active drivers
 		$player1['Driver']['active'] = 'true';
 		$player2['Driver']['active'] = 'true';
 		
@@ -87,6 +185,10 @@ class AdministrationController extends AppController {
 		
 		$this->Setting->query('update settings set value = ' . $player1['Driver']['id'] . ' where name = "player_1"');
 		$this->Setting->query('update settings set value = ' . $player2['Driver']['id'] . ' where name = "player_2"');
+		
+		//set the active match to the first one
+		$this->Setting->query('update settings set value = 1 where name = "active_match"');
+		$this->Setting->query('update settings set value = 1 where name = "active_level"');
 		
 		//get a cup for them to play
 		$cup_id = rand(0,count($cups) - 1);
@@ -106,6 +208,9 @@ class AdministrationController extends AppController {
 	public function stop(){
 		//stop the tournament
 		$this->Setting->query('update settings set value = "false" where name = "tournament_active"');
+		
+		//delete the bracket
+		$this->Match->query("truncate matches");
 		
 		//update the drivers stats
 		$this->Setting->query('update drivers set games_played = 0');

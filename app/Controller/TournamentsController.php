@@ -11,7 +11,7 @@ App::uses('AppController', 'Controller');
  * @link https://book.cakephp.org/2.0/en/controllers/pages-controller.html
  */
 class TournamentsController extends AppController {
-	public $uses = array('Driver','Setting','Cup','Game');
+	public $uses = array('Driver','Setting','Cup','Game','Match');
 
 	public function login($id){
 		$this->Session->write('driver_id',$id);
@@ -48,12 +48,28 @@ class TournamentsController extends AppController {
 		
 		$settings = $this->Setting->find('list',array('fields'=>array('Setting.name','Setting.value')));
 		
+		//get current players
 		$this->set('player1',$this->_findDriver($drivers, $settings['player_1']));
 		$this->set('player2',$this->_findDriver($drivers, $settings['player_2']));
+		
+		//get current match
+		$this->set('match',$this->Match->find('all',array('conditions'=>array('Match.bracket_level'=>$settings['active_level'],'Match.match_num'=>$settings['active_match']))));
 		
 		//load the active game
 		$game = $this->Game->find('first',array('conditions'=>array('Game.id'=>$settings['active_game'])));
 		$this->set('game',$game);
+		
+		//load the tournament
+		$tournament = array();
+		
+	}
+	
+	public function bracket(){
+		$this->layout = '';
+		
+		$matches = $this->Match->find('all',array('order'=>'Match.bracket_level asc, Match.match_num asc, Match.id asc'));
+		$this->set('matches',$matches);
+		
 	}
 	
 	public function add_driver(){
@@ -104,7 +120,7 @@ class TournamentsController extends AppController {
 				
 				$this->Driver->save($driver);
 				
-				$this->_updateTournament($driver['Driver']['games_played'],$settings);
+				$this->_updateTournament($driver['Driver']['id'],$score,$settings);
 				
 				$this->Session->setFlash('Saved');
 			}
@@ -129,7 +145,13 @@ class TournamentsController extends AppController {
 		$this->set('title_for_layout','Rules');
 	}
 	
-	public function _updateTournament($round,$settings){
+	public function _updateTournament($driverId,$score,$settings){
+		//update the score for this match
+		$match = $this->Match->find('first',array('conditions'=>array('Match.driver_id'=>$driverId,'Match.bracket_level'=>$settings['active_level'],'Match.match_num'=>$settings['active_match'])));
+		$match['Match']['score'] = $score;
+		
+		$this->Match->save($match);
+		
 		//check if there are any active users
 		$activeDrivers = $this->Driver->find('all',array('conditions'=>array('Driver.active'=>'true')));
 		
@@ -140,78 +162,63 @@ class TournamentsController extends AppController {
 			//get a list of all the cups
 			$cups = $this->Cup->find('all',array('conditions'=>array('Cup.game_id'=>$settings['active_game'])));
 			
-			//list drivers by games played
-			$drivers = $this->Driver->find('all',array('conditions'=>array('Driver.games_played < ' . $round),'order'=>'Driver.games_played asc'));
-			
-			if(count($drivers) == 0 && $round < $settings['total_rounds'])
+			//set the winner of this match
+			$currentMatch = $this->Match->find('all',array('conditions'=>array('Match.bracket_level'=>$settings['active_level'],'Match.match_num'=>$settings['active_match'])));
+
+			if($currentMatch[0]['Match']['score'] > $currentMatch[1]['Match']['score'])
 			{
-				$round = $round + 1;
-				
-				$drivers = $this->Driver->find('all',array('conditions'=>array('Driver.games_played < ' . $round),'order'=>'Driver.games_played asc'));
+				//move this player to the next round
+				$this->_updateMatch($currentMatch[0]['Match']['driver_id'],$settings['active_level'], $settings['active_match']);
+			}
+			else
+			{
+				$this->_updateMatch($currentMatch[1]['Match']['driver_id'],$settings['active_level'], $settings['active_match']);
 			}
 			
-			if(count($drivers) >= 2)
+			//get the next active match
+			$nextMatch = $this->_nextMatch($settings['active_level'], $settings['active_match']);
+			
+			
+			if($nextMatch != null)
 			{
-				$p1 = rand(0,count($drivers)-1);
-				$p2 = $p1;
-				
-				while($p2 == $p1)
-				{
-					$p2 = rand(0,count($drivers)-1);
-				}
-				
-				$player1 = $drivers[$p1];
-				$player2 = $drivers[$p2];
+				//update the active players
+				$player1 = $nextMatch[0];
+				$player2 = $nextMatch[1];
 				
 				$player1['Driver']['active'] = 'true';
 				$player2['Driver']['active'] = 'true';
-				
+			
 				$this->Driver->save($player1);
 				$this->Driver->save($player2);
-				
+			
 				$this->Setting->query('update settings set value = ' . $player1['Driver']['id'] . ' where name = "player_1"');
 				$this->Setting->query('update settings set value = ' . $player2['Driver']['id'] . ' where name = "player_2"');
 				
-				//get a cup for them to play
-				$cup_id = rand(0,count($cups) - 1);
-			
-				while(($player1['Driver']['level'] == 0 || $player2['Driver']['level'] == 0) and $cups[$cup_id]['Cup']['level'] == 1)
-				{
-					//redraw
-					$cup_id = rand(0,count($cups) - 1);
-				}
-				
-				$this->Setting->query('update settings set value = "' . $cups[$cup_id]['Cup']['name'] . '" where name = "active_cup"');
-				
-			}
-			else if(count($drivers) == 1)
-			{
-				//we have an odd number
-				$player1 = $drivers[0];
-				
-				$player1['Driver']['active'] = 'true';
-				
-				$this->Driver->save($player1);
-				
-				$this->Setting->query('update settings set value = ' . $player1['Driver']['id'] . ' where name = "player_1"');
-				$this->Setting->query('update settings set value = -1 where name = "player_2"');
-				
-				//get a cup for them to play
-				$cup_id = rand(0,count($cups) - 1);
-			
-				while($player1['Driver']['level'] == 0 and $cups[$cup_id]['Cup']['level'] == 1)
-				{
-					//redraw
-					$cup_id = rand(0,count($cups) - 1);
-				}
-				
-				$this->Setting->query('update settings set value = "' . $cups[$cup_id]['Cup']['name'] . '" where name = "active_cup"');
+				//update the active matches
+				$this->Setting->query('update settings set value = ' . $nextMatch[0]['Match']['bracket_level'] . ' where name = "active_level"');
+				$this->Setting->query('update settings set value = ' . $nextMatch[0]['Match']['match_num'] . ' where name = "active_match"');
 			}
 			else
 			{
 				//game over!
 				$this->Setting->query('update settings set value = "true" where name = "game_over"');
 			}
+			/*
+			
+			
+			//get a cup for them to play
+			$cup_id = rand(0,count($cups) - 1);
+		
+			while(($player1['Driver']['level'] == 0 || $player2['Driver']['level'] == 0) and $cups[$cup_id]['Cup']['level'] == 1)
+			{
+				//redraw
+				$cup_id = rand(0,count($cups) - 1);
+			}
+			
+			$this->Setting->query('update settings set value = "' . $cups[$cup_id]['Cup']['name'] . '" where name = "active_cup"');
+				
+			
+			*/
 			
 		}
 	}
@@ -226,5 +233,72 @@ class TournamentsController extends AppController {
 		}
 
 		return null;
+	}
+	
+	public function _nextMatch($currentLevel,$currentMatch){
+		$result = null;
+		
+		//see if we can just increase the match
+		while($this->Match->find('count',array('conditions'=>array('Match.bracket_level'=>$currentLevel,'Match.match_num'=>($currentMatch + 1)))) > 0 && $result == null)
+		{
+			//get the match and make sure it isn't a bye
+			$aMatch = $this->Match->find('all',array('conditions'=>array('Match.bracket_level'=>$currentLevel,'Match.match_num'=>($currentMatch + 1))));
+
+			if($aMatch[0]['Match']['driver_id'] != -1 && $aMatch[1]['Match']['driver_id'] != -1)
+			{
+				//we're good
+				$result = $aMatch;
+			}
+			else
+			{
+				//check for a bye
+				if($aMatch[0]['Match']['driver_id'] != -1)
+				{
+					//update the next match for this player
+					$this->_updateMatch($aMatch[0]['Match']['driver_id'], $currentLevel, $currentMatch);
+				}
+				else if($aMatch[1]['Match']['driver_id'] != -1)
+				{
+					$this->_updateMatch($aMatch[1]['Match']['driver_id'], $currentLevel, $currentMatch);
+				}
+				
+				$currentMatch ++;
+			}
+		}
+
+		//if that doesn't work go up one level
+		if($result == null)
+		{
+			if($this->Match->find('count',array('conditions'=>array('Match.bracket_level'=>($currentLevel + 1),'Match.match_num'=>1))) > 0)
+			{
+				//get this match
+				$result = $this->Match->find('all',array('conditions'=>array('Match.bracket_level'=>($currentLevel + 1),'Match.match_num'=>1)));
+			}
+		}
+		
+		return $result;
+	}
+	
+	function _updateMatch($driverId,$level,$match){
+		$level ++;
+		
+		//make match even
+		if($match % 2 != 0)
+		{
+			$match ++;
+		}
+		$match = $match /2; //number of next match in sequence
+		
+		//see if there is a next match
+		if($this->Match->find('count',array('conditions'=>array('Match.bracket_level'=>$level,'Match.match_num'=>$match))) > 0)
+		{
+			//get the match
+			$aMatch = $this->Match->find('first',array('conditions'=>array('Match.driver_id'=>-1,'Match.bracket_level'=>$level,'Match.match_num'=>$match),'order'=>'Match.id asc'));
+			
+			//set the driver
+			$aMatch['Match']['driver_id'] = $driverId;
+			
+			$this->Match->save($aMatch);
+		}
 	}
 }
