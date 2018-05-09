@@ -28,7 +28,7 @@ foreach($matches as $aMatch){
 		$driverName = null;
 		if($aMatch['Match']['driver_id'] != -1)
 		{
-			$driverName = $aMatch['Driver']['name'];
+			$driverName = array('name'=>$aMatch['Driver']['name'],'img'=>$aMatch['Driver']['image']);
 		}
 		
 		//add to team

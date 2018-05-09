@@ -17,7 +17,7 @@ $avatars  = array('baby_daisy','baby_luigi','baby_mario','baby_peach','bowser','
 		<div class="row">
 	<?php endif; ?>
 		<div class="col-lg-6">
-			<input type="radio" name="data[Driver][image]" id="<?php echo $avatar ?>" value="avatars/<?php echo $avatar ?>.jpg"/>
+			<input type="radio" name="data[Driver][image]" id="<?php echo $avatar ?>" value="<?php echo $avatar ?>"/>
 			<label class="avatar <?php echo $avatar ?>" for="<?php echo $avatar ?>"></label>
 		</div>
 	<?php if($mod % 2 == 1): ?>

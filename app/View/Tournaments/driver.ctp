@@ -2,7 +2,7 @@
 <div class="jumbotron">
 	<div class="row">
 		<div class="col-lg-6">
-			<p><?php echo $this->Html->image($driver['Driver']['image']) ?></p>
+			<p><?php echo $this->Html->image('avatars/' . $driver['Driver']['image'] . '.jpg') ?></p>
 		</div>
 		<div class="col-lg-6">
 			<h2><?php echo $driver['Driver']['name'] ?></h2>

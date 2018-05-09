@@ -13,7 +13,7 @@
 			<div class="col-lg-4">
 		<?php endif;?>
 		
-		<h4><?php echo $this->Html->image($aDriver['Driver']['image'],array('url'=>'/tournaments/login/' . $aDriver['Driver']['id'])) ?></h4>
+		<h4><?php echo $this->Html->image('avatars/' . $aDriver['Driver']['image'] . '.jpg',array('url'=>'/tournaments/login/' . $aDriver['Driver']['id'])) ?></h4>
 		<h4><?php echo $this->Html->link($aDriver['Driver']['name'],'/tournaments/login/' . $aDriver['Driver']['id'],array('class'=>'label label-primary')) ?></h4>
 		
 		<?php if($mod % 2 == 1): ?>

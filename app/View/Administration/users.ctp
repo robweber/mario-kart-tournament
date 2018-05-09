@@ -7,7 +7,7 @@
 	</tr>
 <?php foreach($drivers as $driver): ?>
 		<tr>
-			<td><h3><?php echo $this->Html->image($driver['Driver']['image'],array('width'=>'50px','height'=>'50px'))?></h3></td>
+			<td><h3><?php echo $this->Html->image('avatars/' . $driver['Driver']['image'] . '.jpg',array('width'=>'50px','height'=>'50px'))?></h3></td>
 			<td><h3><?php echo $driver['Driver']['name']?></h3></td>
 			<td><h3><?php echo $driver['Driver']['score']?></h3></td>
 			<td><h3><?php echo $this->Html->link('Delete','/admin/delete/' . $driver['Driver']['id'])?></h3></td>
