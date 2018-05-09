@@ -169,10 +169,24 @@ class TournamentsController extends AppController {
 			{
 				//move this player to the next round
 				$this->_updateMatch($currentMatch[0]['Match']['driver_id'],$settings['active_level'], $settings['active_match']);
+				
+				//set winner/loser
+				$currentMatch[0]['Driver']['wins'] ++;
+				$currentMatch[1]['Driver']['losses'] ++;
+				
+				$this->Driver->save($currentMatch[0]);
+				$this->Driver->save($currentMatch[1]);
 			}
 			else
 			{
 				$this->_updateMatch($currentMatch[1]['Match']['driver_id'],$settings['active_level'], $settings['active_match']);
+				
+				//set winner/loser
+				$currentMatch[1]['Driver']['wins'] ++;
+				$currentMatch[0]['Driver']['losses'] ++;
+				
+				$this->Driver->save($currentMatch[0]);
+				$this->Driver->save($currentMatch[1]);
 			}
 			
 			//get the next active match

@@ -51,9 +51,7 @@ class AdministrationController extends AppController {
 		$this->Setting->query('update settings set value = "false" where name = "game_over"');
 		
 		//update the drivers stats
-		$this->Setting->query('update drivers set score = 0');
-		$this->Setting->query('update drivers set games_played = 0');
-		$this->Setting->query('update drivers set active = "false"');
+		$this->Driver->query('update drivers set games_played = 0, wins = 0, losses = 0, score = 0, active = "false"');
 		
 		//delete the old bracket
 		$this->Match->query("truncate matches");
@@ -203,9 +201,7 @@ class AdministrationController extends AppController {
 		$this->Match->query("truncate matches");
 		
 		//update the drivers stats
-		$this->Setting->query('update drivers set games_played = 0');
-		$this->Setting->query('update drivers set active = "false"');
-		$this->Setting->query('update drivers set score = 0');
+		$this->Setting->query('update drivers set games_played = 0, wins = 0, losses = 0, score = 0, active = "false"');
 		
 		$this->Session->setFlash("Tournament Stopped");
 		$this->redirect('/admin');

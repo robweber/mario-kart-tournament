@@ -3,10 +3,14 @@
 	<div class="row">
 		<div class="col-lg-6">
 			<p><?php echo $this->Html->image('avatars/' . $driver['Driver']['image'] . '.jpg') ?></p>
+			<h2><?php echo $driver['Driver']['name'] ?></h2>
 		</div>
 		<div class="col-lg-6">
-			<h2><?php echo $driver['Driver']['name'] ?></h2>
-			<h3>Total Score: <?php echo $driver['Driver']['score'] ?></h3>
+			<h3 align="left">Total Score: <?php echo $driver['Driver']['score'] ?><br>
+				Games Played: <?php echo $driver['Driver']['games_played'] ?><br>
+				Wins: <?php echo $driver['Driver']['wins'] ?><br>
+				Losses: <?php echo $driver['Driver']['losses'] ?>
+			</h3>
 		</div>
 	</div>
 </div>
