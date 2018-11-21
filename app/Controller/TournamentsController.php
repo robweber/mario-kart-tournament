@@ -12,7 +12,8 @@ App::uses('AppController', 'Controller');
  */
 class TournamentsController extends AppController {
 	public $uses = array('Driver','Setting','Cup','Game','Match');
-
+    public $components = array('Session','Sms');
+    
 	public function login($id){
 		$this->Session->write('driver_id',$id);
 		$this->redirect('/tournaments/driver');
@@ -81,6 +82,9 @@ class TournamentsController extends AppController {
 			
 			$this->Driver->save($this->data['Driver']);
 			
+            //send a test SMS, if the phone is there
+            $this->Sms->sendSMS($this->data['Driver']['phone'],'Welcome to Mario Kart! This is just a test, you\'ll be notified when it\'s your turn to play');
+            
 			//save the model id
 			$this->Session->write('driver_id',$this->Driver->getLastInsertID());
 			$this->redirect('/tournaments/home');
@@ -99,7 +103,7 @@ class TournamentsController extends AppController {
 		$driver = $this->Driver->find('first',array('conditions'=>array('Driver.id'=>$this->Session->read('driver_id'))));
 		$this->set('driver',$driver);
 	}
-	
+    
 	public function update_score(){
 		if($this->request->is('post'))
 		{
@@ -211,17 +215,22 @@ class TournamentsController extends AppController {
 				//update the active matches
 				$this->Setting->query('update settings set value = ' . $nextMatch[0]['Match']['bracket_level'] . ' where name = "active_level"');
 				$this->Setting->query('update settings set value = ' . $nextMatch[0]['Match']['match_num'] . ' where name = "active_match"');
+                
+                //get a cup for them to play
+                $cup_id = rand(0,count($cups) - 1);
+            
+                $this->Setting->query('update settings set value = "' . $cups[$cup_id]['Cup']['name'] . '" where name = "active_cup"');
+               
+                //notify each player
+                $this->Sms->notifyNext($player1['Driver']['phone'], $player1['Driver']['name'], $player2['Driver']['name'],$cups[$cup_id]['Cup']['name'] . ' Cup');
+                $this->Sms->notifyNext($player2['Driver']['phone'], $player2['Driver']['name'], $player1['Driver']['name'],$cups[$cup_id]['Cup']['name'] . ' Cup');
+                 
 			}
 			else
 			{
 				//game over!
 				$this->Setting->query('update settings set value = "true" where name = "game_over"');
 			}
-			
-			//get a cup for them to play
-			$cup_id = rand(0,count($cups) - 1);
-			
-			$this->Setting->query('update settings set value = "' . $cups[$cup_id]['Cup']['name'] . '" where name = "active_cup"');
 
 		}
 	}

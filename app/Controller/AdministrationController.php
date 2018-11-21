@@ -12,7 +12,8 @@ App::uses('AppController', 'Controller');
  */
 class AdministrationController extends AppController {
 	public $uses = array('Game','Cup','Setting','Driver','Match');
-
+    public $components = array('Session','Sms');
+    
 	public function beforeRender(){
 		$settings = $this->Setting->find('list',array('fields'=>array('Setting.name','Setting.value')));
 		$this->set('settings',$settings);
@@ -60,7 +61,7 @@ class AdministrationController extends AppController {
 		$settings = $this->Setting->find('list',array('fields'=>array('Setting.name','Setting.value')));
 		
 		//figure out the seeds
-		$drivers = $this->Driver->find('all',array('order'=>'Driver.name DESC'));
+		$drivers = $this->Driver->find('all',array('order'=>'Driver.phone DESC, Driver.id DESC'));
 		$matchCount = count($drivers);
 
 		//first round players are a multiple of 4
@@ -189,6 +190,11 @@ class AdministrationController extends AppController {
 		
 		$this->Setting->query('update settings set value = "' . $cups[$cup_id]['Cup']['name'] . '" where name = "active_cup"');
 		
+        //notify each player
+        $this->Sms->notifyNext($player1['Driver']['phone'], $player1['Driver']['name'], $player2['Driver']['name'],$cups[$cup_id]['Cup']['name'] . ' Cup');
+        $this->Sms->notifyNext($player2['Driver']['phone'], $player2['Driver']['name'], $player1['Driver']['name'],$cups[$cup_id]['Cup']['name'] . ' Cup');
+         
+        
 		$this->Session->setFlash("Tournament Started");
 		$this->redirect('/admin');
 	}

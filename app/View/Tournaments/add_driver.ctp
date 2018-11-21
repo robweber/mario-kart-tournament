@@ -3,6 +3,8 @@
 <div class="form-group">
 	<label for="name">Name</label>
 	<?php echo $this->Form->input('name',array('label'=>false,'div'=>false,'class'=>'form-control')) ?>
+	<label for="phone">Phone #</label>
+	<?php echo $this->Form->input('phone',array('label'=>false,'div'=>false,'class'=>'form-control')) ?>
 </div>
 
 <?php 

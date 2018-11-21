@@ -6,7 +6,8 @@
 			<h2><?php echo $driver['Driver']['name'] ?></h2>
 		</div>
 		<div class="col-lg-6">
-			<h3 align="left">Total Score: <?php echo $driver['Driver']['score'] ?><br>
+			<h3 align="left">Phone: <?php echo $driver['Driver']['phone'] ?><br>
+			    Total Score: <?php echo $driver['Driver']['score'] ?><br>
 				Games Played: <?php echo $driver['Driver']['games_played'] ?><br>
 				Wins: <?php echo $driver['Driver']['wins'] ?><br>
 				Losses: <?php echo $driver['Driver']['losses'] ?>
@@ -27,7 +28,3 @@
 	</div>
 	<?php echo $this->Form->end(); ?>
 <?php endif; ?>
-
-<?php 
-
-?>
