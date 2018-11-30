@@ -78,12 +78,17 @@ class TournamentsController extends AppController {
 		
 		if($this->request->is('post'))
 		{
+		    $settings = $this->Setting->find('list',array('fields'=>array('Setting.name','Setting.value')));
+            
 			$this->Session->setFlash('Driver Added');
 			
 			$this->Driver->save($this->data['Driver']);
 			
-            //send a test SMS, if the phone is there
-            $this->Sms->sendSMS($this->data['Driver']['phone'],'Welcome to Mario Kart! This is just a test, you\'ll be notified when it\'s your turn to play');
+            if($settings['send_sms'] == 1)
+            {
+                //send a test SMS, if the phone is there
+                $this->Sms->sendSMS($this->data['Driver']['phone'],'Welcome to Mario Kart! This is just a test, you\'ll be notified when it\'s your turn to play');
+            }
             
 			//save the model id
 			$this->Session->write('driver_id',$this->Driver->getLastInsertID());
