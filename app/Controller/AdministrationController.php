@@ -64,7 +64,7 @@ class AdministrationController extends AppController {
 		$settings = $this->Setting->find('list',array('fields'=>array('Setting.name','Setting.value')));
 		
 		//figure out the seeds
-		$drivers = $this->Driver->find('all',array('order'=>'Driver.phone DESC, Driver.id DESC'));
+		$drivers = $this->Driver->find('all',array('order'=>'rand()'));
 		$matchCount = count($drivers);
 
 		//first round players are a multiple of 4
