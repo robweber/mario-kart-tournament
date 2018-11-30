@@ -1,4 +1,5 @@
 <div class="well">
+    <p>Currently the tournament is set for <?php echo $game['Game']['name'] ?></p>
 	<p>The tournament is a single elimination style bracket.</p>
 	<p>Drivers will be randomly matched. </p>
 	<p>The scoreboard page will show the standings and currently active match. </p>

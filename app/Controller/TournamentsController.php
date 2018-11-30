@@ -147,6 +147,12 @@ class TournamentsController extends AppController {
 	
 	public function rules(){
 		$this->set('title_for_layout','Rules');
+        
+        $settings = $this->Setting->find('list',array('fields'=>array('Setting.name','Setting.value')));
+        
+        //load the active game
+        $game = $this->Game->find('first',array('conditions'=>array('Game.id'=>$settings['active_game'])));
+        $this->set('game',$game);
 	}
 	
 	public function _updateTournament($driverId,$score,$settings){
