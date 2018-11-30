@@ -222,9 +222,11 @@ class TournamentsController extends AppController {
                 $this->Setting->query('update settings set value = "' . $cups[$cup_id]['Cup']['name'] . '" where name = "active_cup"');
                
                 //notify each player
-                $this->Sms->notifyNext($player1['Driver']['phone'], $player1['Driver']['name'], $player2['Driver']['name'],$cups[$cup_id]['Cup']['name'] . ' Cup');
-                $this->Sms->notifyNext($player2['Driver']['phone'], $player2['Driver']['name'], $player1['Driver']['name'],$cups[$cup_id]['Cup']['name'] . ' Cup');
-                 
+                if($settings['send_sms'] == 1)
+                {
+                    $this->Sms->notifyNext($player1['Driver']['phone'], $player1['Driver']['name'], $player2['Driver']['name'],$cups[$cup_id]['Cup']['name'] . ' Cup');
+                    $this->Sms->notifyNext($player2['Driver']['phone'], $player2['Driver']['name'], $player1['Driver']['name'],$cups[$cup_id]['Cup']['name'] . ' Cup');
+                }
 			}
 			else
 			{

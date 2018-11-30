@@ -7,6 +7,11 @@
 	</div>
 	
 	<div class="form-group">
+	    <label for="sendSms">Send SMS</label>
+	    <?php echo $this->Form->input('SendSms',array('label'=>false,'div'=>false,'class'=>'form-control','type'=>'select','options'=>array(1=>'Yes',0=>'No'),'selected'=>$settings['send_sms'])); ?>
+	</div>
+	
+	<div class="form-group">
 		<?php echo $this->Form->submit('Update',array('class'=>'btn btn-large btn-info')); ?>
 	</div>
 	<?php echo $this->Form->end() ?>

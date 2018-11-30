@@ -28,6 +28,9 @@ class AdministrationController extends AppController {
 			
 			//update the active game id
 			$this->Setting->query('update settings set value = ' . $this->data['ActiveGame']['ActiveGame']  . ' where name = "active_game"');
+            
+            //update the send sms value
+            $this->Setting->query('update settings set value = ' . $this->data['ActiveGame']['SendSms'] . ' where name = "send_sms"');
 		}
 		
 		$games = $this->Game->find('list',array('fields'=>array('Game.id','Game.name')));
@@ -191,9 +194,11 @@ class AdministrationController extends AppController {
 		$this->Setting->query('update settings set value = "' . $cups[$cup_id]['Cup']['name'] . '" where name = "active_cup"');
 		
         //notify each player
-        $this->Sms->notifyNext($player1['Driver']['phone'], $player1['Driver']['name'], $player2['Driver']['name'],$cups[$cup_id]['Cup']['name'] . ' Cup');
-        $this->Sms->notifyNext($player2['Driver']['phone'], $player2['Driver']['name'], $player1['Driver']['name'],$cups[$cup_id]['Cup']['name'] . ' Cup');
-         
+        if($settings['send_sms'] == 1)
+        {
+            $this->Sms->notifyNext($player1['Driver']['phone'], $player1['Driver']['name'], $player2['Driver']['name'],$cups[$cup_id]['Cup']['name'] . ' Cup');
+            $this->Sms->notifyNext($player2['Driver']['phone'], $player2['Driver']['name'], $player1['Driver']['name'],$cups[$cup_id]['Cup']['name'] . ' Cup');
+        }
         
 		$this->Session->setFlash("Tournament Started");
 		$this->redirect('/admin');
