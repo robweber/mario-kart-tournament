@@ -3,7 +3,8 @@ import logging
 import os.path
 import sys
 import modules.utils as utils
-from flask import Flask, render_template
+import modules.database as db
+from flask import Flask, render_template, request, url_for, flash, redirect
 
 # create the web service
 app = Flask(import_name="mario-kart-tournament", static_folder=os.path.join(utils.DIR_PATH, 'web', 'static'),
@@ -15,7 +16,40 @@ app.secret_key = os.urandom(24)
 
 @app.route('/', methods=["GET"])
 def index():
-    return render_template("index.html")
+    return render_template("index.html", drivers=db.execute_query("select * from drivers"), settings=load_settings())
+
+
+@app.route('/tournaments/add_driver', methods=["GET", "POST"])
+def add_driver():
+
+    # check if submitting the form
+    logging.debug(request.form)
+    if request.method == "POST":
+        if not request.form['name']:
+            flash("Please fill in your name", "error")
+        elif 'image' not in request.form:
+            flash("Please select an avatar image")
+        else:
+            # save the new driver
+            flash(f"Driver { request.form['name'] } saved")
+            db.execute_update("insert into drivers (name, phone, image) values (?, ?, ?)",
+                              [request.form['name'], request.form['phone'], request.form['image']])
+            return redirect(url_for('index'))
+
+    return render_template("add_driver.html", avatars=utils.AVATARS)
+
+
+def load_settings():
+    """this is needed on almost every page load
+
+    :returns: the settings in a dict {key:value}
+    """
+    result = {}
+    # convert the settings list to a dict
+    for s in db.execute_query("select * from settings"):
+        result[s['name']] = s['value']
+
+    return result
 
 
 # parse the CLI args

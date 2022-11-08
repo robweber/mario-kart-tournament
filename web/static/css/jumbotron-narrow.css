@@ -11,11 +11,11 @@ div.jQBracket .team div.label{
 	text-align:left;
 }
 
-#flashMessage {
+.alert {
 	font-size: 1.4em;
 }
 
-#flashMessage.error {
+.alert-error {
   background-image: -webkit-linear-gradient(top, #f2dede 0%, #e7c3c3 100%);
   background-image:      -o-linear-gradient(top, #f2dede 0%, #e7c3c3 100%);
   background-image: -webkit-gradient(linear, left top, left bottom, from(#f2dede), to(#e7c3c3));
@@ -25,7 +25,7 @@ div.jQBracket .team div.label{
   border-color: #dca7a7;
 }
 
-#flashMessage.message {
+.alert-message {
   background-image: -webkit-linear-gradient(top, #dff0d8 0%, #c8e5bc 100%);
   background-image:      -o-linear-gradient(top, #dff0d8 0%, #c8e5bc 100%);
   background-image: -webkit-gradient(linear, left top, left bottom, from(#dff0d8), to(#c8e5bc));

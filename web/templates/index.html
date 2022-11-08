@@ -1,4 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
-Test
+{% if settings['tournament_active'] == 'false': %}
+<h2><a href="/tournaments/add_driver" class="label label-success">New Driver</a></h2>
+{% endif %}
+<div class="jumbotron">
+  {% set mod = 0 %}
+  {% if drivers | length > 0: %}
+  	<div class="row">
+  	{% for driver in drivers: %}
+  		{% if mod % 2 == 0: %}
+  			<div class="col-lg-4">
+  		{% endif %}
+      <h4><a href="/tournaments/driver/{{ driver['id'] }}"><img src="/static/img/avatars/{{ driver['image'] }}.jpg" /><br />{{ driver['name'] }}</a></h4>
+  		{% if mod % 2 == 1: %}
+  			</div>
+  		{% endif %}
+  		{% set mod = mod + 1 %}
+  	{% endfor %}
+  	</div>
+  {% else %}
+  	<h3>There aren't any drivers - add one!</h3>
+  {% endif %}
+</div>
 {% endblock %}
