@@ -4,7 +4,12 @@ This is a simple web app that allows for the administration of a Mario Kart Tour
 
 ## Install
 
-
+Clone the repository and download the required libraries. Note that `sudo` is needed since we'll need root to bind to a socket later. 
+```
+git clone https://github.com/robweber/mario-kart-tournament.git
+cd mario-kart-tournament
+sudo pip3 install .
+```
 
 ### Features
 
