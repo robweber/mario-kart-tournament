@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="jumbotron">
+	<div class="row">
+		<div class="col-lg-6">
+			<p><img src="/static/img/avatars/{{ driver['image'] }}.jpg" /></p>
+			<h2>{{ driver['name'] }}</h2>
+		</div>
+		<div class="col-lg-6">
+			<h3 align="left">
+				Games Played: {{ driver['wins'] + driver['losses'] }}<br>
+				Wins: {{ driver['wins'] }}<br>
+				Losses: {{ driver['losses'] }}
+			</h3>
+		</div>
+	</div>
+</div>
+{% endblock %}

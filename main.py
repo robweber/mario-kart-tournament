@@ -16,7 +16,13 @@ app.secret_key = os.urandom(24)
 
 @app.route('/', methods=["GET"])
 def index():
-    return render_template("index.html", drivers=db.execute_query("select * from drivers"), settings=load_settings())
+    settings=load_settings()
+
+    if(settings['tournament_active'] == 'true'):
+        # redirect to scoreboard page
+        return redirect(url_for('scoreboard'))
+    else:
+        return render_template("index.html", drivers=db.execute_query("select * from drivers"), settings=settings)
 
 @app.route('/tournaments/rules', methods=['GET'])
 def rules():
@@ -39,6 +45,17 @@ def add_driver():
 
     return render_template("add_driver.html", avatars=utils.AVATARS)
 
+@app.route('/tournaments/driver/<id>', methods=['GET'])
+def view_driver(id):
+    # get the driver's information
+    driver = db.execute_query("select * from drivers where id = ?", [id], True)
+
+    return render_template('driver_info.html', driver=driver)
+
+@app.route('/tournaments/scoreboard', methods=['GET'])
+def scoreboard():
+    return render_template('scoreboard.html')
+
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     # check if updating the tournament setup
@@ -55,8 +72,13 @@ def admin():
 
 @app.route('/admin/start_tournament', methods=['GET'])
 def start_tournament():
-    # start the tournament
-    db.execute_update("update settings set value=? where name = ?", ['true', 'tournament_active'])
+    # first update the settings
+    db.execute_update("update settings set value= ? where name = ?", ['true', 'tournament_active'])
+    db.execute_update('update settings set value= ? where name = ?', ['false', 'game_over'])
+
+    # update the driver starts
+    db.execute_update('update drivers set games_played = 0, wins = 0, losses = 0, score = 0, active = "false"')
+
     flash('Tournament Started')
 
     return redirect(url_for("admin"))
