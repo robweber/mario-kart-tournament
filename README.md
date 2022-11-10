@@ -12,6 +12,12 @@ cd mario-kart-tournament
 sudo pip3 install -r requirements.txt
 ```
 
+You'll also need to make a copy of the database to avoid messing the original version. The webservice expects to find it in a specific path.
+
+```
+cp mario-kart-tournment.db mario-kart-tournment.live.db
+```
+
 ## Usage
 Once the required features have been installed you can run the program with default options to start the web service on port 5000.
 
