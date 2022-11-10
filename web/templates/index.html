@@ -1,21 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
 {% if settings['tournament_active'] == 'false': %}
-<h2><a href="/tournaments/add_driver" class="btn btn-success btn-block btn-lg">New Driver</a></h2>
+<h2><a href="/tournaments/add_driver" class="btn btn-success btn-block btn-lg mb-3">New Driver</a></h2>
 {% endif %}
+{% set mod = namespace(c=0) %}
 <div class="jumbotron">
-  {% set mod = 0 %}
   {% if drivers | length > 0: %}
   	<div class="row">
   	{% for driver in drivers: %}
-  		{% if mod % 2 == 0: %}
+  		{% if mod.c % 2 == 0: %}
   			<div class="col-lg-4">
   		{% endif %}
       <h4><a href="/tournaments/driver/{{ driver['id'] }}"><img src="/static/img/avatars/{{ driver['image'] }}.jpg" /><br />{{ driver['name'] }}</a></h4>
-  		{% if mod % 2 == 1: %}
+  		{% if mod.c % 2 == 1: %}
   			</div>
   		{% endif %}
-  		{% set mod = mod + 1 %}
+  		{% set mod.c = mod.c + 1 %}
   	{% endfor %}
   	</div>
   {% else %}
