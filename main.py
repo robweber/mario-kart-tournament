@@ -20,17 +20,11 @@ def index():
 
 @app.route('/tournaments/rules', methods=['GET'])
 def rules():
-    # get the currently active game
-    settings = load_settings()
-    active_game = db.execute_query("select * from games where id = ?", settings['active_game'], True)
-
-    return render_template('rules.html', active_page='rules', active_game=active_game)
+    return render_template('rules.html', active_page='rules', active_game=find_active_game())
 
 @app.route('/tournaments/add_driver', methods=["GET", "POST"])
 def add_driver():
-
     # check if submitting the form
-    logging.debug(request.form)
     if request.method == "POST":
         if not request.form['name']:
             flash("Please fill in your name", "error")
@@ -45,6 +39,39 @@ def add_driver():
 
     return render_template("add_driver.html", avatars=utils.AVATARS)
 
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+    # check if updating the tournament setup
+    if request.method == 'POST':
+        # update the sms and active game settings
+        db.execute_update("update settings set value = ? where name = ?", [request.form['active_game'], 'active_game'])
+        db.execute_update("update settings set value = ? where name = ?", [request.form['send_sms'], 'send_sms'])
+
+        flash("Settings Updated")
+
+    # send the settings, the currently active game, and a list of games
+    return render_template('admin.html', active_page='setup', active_game=find_active_game(),
+                            settings=load_settings(), games=db.execute_query("select * from games order by name asc"))
+
+@app.route('/admin/start_tournament', methods=['GET'])
+def start_tournament():
+    # start the tournament
+    db.execute_update("update settings set value=? where name = ?", ['true', 'tournament_active'])
+    flash('Tournament Started')
+
+    return redirect(url_for("admin"))
+
+@app.route('/admin/stop_tournament', methods=['GET'])
+def stop_tournament():
+    # start the tournament
+    db.execute_update("update settings set value=? where name = ?", ['false', 'tournament_active'])
+    flash('Tournament Stopped')
+
+    return redirect(url_for("admin"))
+
+def find_active_game():
+    # return the current active game based on selected value
+    return db.execute_query("select id, name from games where id = (select value from settings where name = ?)", ["active_game"], True)
 
 def load_settings():
     """this is needed on almost every page load
