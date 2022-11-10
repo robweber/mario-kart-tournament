@@ -1,6 +1,7 @@
 # project specific
 conf/*
 .service_down
+mario-kart-tournament.live.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
