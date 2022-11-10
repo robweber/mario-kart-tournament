@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 {% if settings['tournament_active'] == 'false': %}
-<h2><a href="/tournaments/add_driver" class="label label-success">New Driver</a></h2>
+<h2><a href="/tournaments/add_driver" class="btn btn-success btn-block btn-lg">New Driver</a></h2>
 {% endif %}
 <div class="jumbotron">
   {% set mod = 0 %}

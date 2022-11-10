@@ -15,20 +15,18 @@
 <body>
 	<div class="container">
 		<div class="header clearfix">
-			<nav>
-        <ul class="nav nav-pills pull-right">
-        	{% if request.endpoint.startswith('admin') %}
-        		<li role="presentation"><a href="/">Home</a></li>
-        		<li role="presentation" class="{{ 'active' if active_page == 'setup' }}"><a href="/admin">Setup</a></li>
-        		<li role="presentation" class="{{ 'active' if active_page == 'users' }}"><a href="/admin/users">Users</a></li>
-        	{% else %}
-        		<li role="presentation" class="{{ 'active' if active_page == 'home' }}"><a href="/">Home</a></li>
-        		<li role="presentation" class="{{ 'active' if active_page == 'scoreboard' }}"><a href="/tournaments/scoreboard">Scoreboard</a></li>
-        		<li role="presentation" class="{{ 'active' if active_page == 'rules' }}"><a href="/tournaments/rules">Rules</a></li>
-        	{% endif %}
-        </ul>
-			</nav>
-			<h3 class="text-muted">Welcome to Mario Kart!</h3>
+      <h3 class="text-muted float-left">Welcome to Mario Kart!</h3>
+      <ul class="nav nav-pills float-right">
+      	{% if request.path.startswith('/admin') %}
+      		<li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+      		<li class="nav-item"><a href="/admin" class="nav-link {{ 'active' if active_page == 'setup' }}">Setup</a></li>
+      		<li class="nav-item"><a href="/admin/drivers" class="nav-link {{ 'active' if active_page == 'drivers' }}">Drivers</a></li>
+      	{% else %}
+      		<li class="nav-item {{ 'active' if active_page == 'home' }}"><a href="/" class="nav-link">Home</a></li>
+      		<li class="nav-item {{ 'active' if active_page == 'scoreboard' }}"><a href="/tournaments/scoreboard" class="nav-link">Scoreboard</a></li>
+      		<li class="nav-item {{ 'active' if active_page == 'rules' }}"><a href="/tournaments/rules" class="nav-link">Rules</a></li>
+      	{% endif %}
+      </ul>
 		</div>
 		<div align="center">
 			<div id="content">

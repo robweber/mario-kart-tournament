@@ -4,7 +4,7 @@
   <form name="ActiveGame" method="post">
 	<div class="form-group">
 		<label for="active_game">Active Game</label>
-    <select name="active_game">
+    <select name="active_game" class="form-control">
       {% for g in games %}
       <option value="{{ g['id'] }}" {{ 'selected' if g['id'] == settings['active_game'] | int }}>{{ g['name'] }}</option>
       {% endfor %}
@@ -13,7 +13,7 @@
 
 	<div class="form-group">
 	    <label for="send_sms">Send SMS</label>
-      <select name="send_sms">
+      <select name="send_sms" class="form-control">
         <option value="true" {{ 'selected' if settings['send_sms'] == 'true' }}>Yes</option>
         <option value="false" {{ 'selected' if settings['send_sms'] == 'false' }}>No</option>
       </select>

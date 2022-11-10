@@ -12,7 +12,7 @@ div.jQBracket .team div.label{
 }
 
 .alert {
-	font-size: 1.4em;
+	font-size: 1.2em;
 }
 
 .alert-error {
@@ -137,14 +137,6 @@ div.jQBracket .team div.label{
 .jumbotron .btn {
   padding: 14px 24px;
   font-size: 21px;
-}
-
-/* Supporting marketing content */
-.marketing {
-  margin: 40px 0;
-}
-.marketing p + h4 {
-  margin-top: 28px;
 }
 
 /* Responsive: Portrait tablets and up */
