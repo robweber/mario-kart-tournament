@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="well" align="left">
+  <p>Currently the tournament is set for <b>{{ active_game['name'] }}</b></p>
+	<p>The tournament is a single elimination style bracket.</p>
+	<p>Drivers will be randomly matched. </p>
+	<p>The <a href="/tournaments/scoreboard">scoreboard page</a> will show the standings and currently active match. </p>
+  <p>The game administrator will manage the winner of each match to advance the tournament.</p>
+</div>
+{% endblock %}

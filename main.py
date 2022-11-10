@@ -18,6 +18,13 @@ app.secret_key = os.urandom(24)
 def index():
     return render_template("index.html", drivers=db.execute_query("select * from drivers"), settings=load_settings())
 
+@app.route('/tournaments/rules', methods=['GET'])
+def rules():
+    # get the currently active game
+    settings = load_settings()
+    active_game = db.execute_query("select * from games where id = ?", settings['active_game'], True)
+
+    return render_template('rules.html', active_page='rules', active_game=active_game)
 
 @app.route('/tournaments/add_driver', methods=["GET", "POST"])
 def add_driver():
