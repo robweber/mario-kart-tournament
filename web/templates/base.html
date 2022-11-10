@@ -1,5 +1,4 @@
 {% set page_title = page_title | default('Mario Kart Tournament') %}
-{% set layout = layout | default('normal') %}
 {% set active_page = active_page | default('home') %}
 <!DOCTYPE html>
 <html>
@@ -18,7 +17,7 @@
 		<div class="header clearfix">
 			<nav>
         <ul class="nav nav-pills pull-right">
-        	{% if layout == 'administration' %}
+        	{% if request.endpoint.startswith('admin') %}
         		<li role="presentation"><a href="/">Home</a></li>
         		<li role="presentation" class="{{ 'active' if active_page == 'setup' }}"><a href="/admin">Setup</a></li>
         		<li role="presentation" class="{{ 'active' if active_page == 'users' }}"><a href="/admin/users">Users</a></li>
