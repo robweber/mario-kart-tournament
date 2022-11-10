@@ -4,11 +4,34 @@ This is a simple web app that allows for the administration of a Mario Kart Tour
 
 ## Install
 
-Clone the repository and download the required libraries. Note that `sudo` is needed since we'll need root to bind to a socket later. 
+Clone the repository and download the required libraries. Note that `sudo` is needed since we'll need root to bind to a socket later.
+
 ```
 git clone https://github.com/robweber/mario-kart-tournament.git
 cd mario-kart-tournament
-sudo pip3 install .
+sudo pip3 install -r requirements.txt
+```
+
+## Usage
+Once the required features have been installed you can run the program with default options to start the web service on port 5000.
+
+```
+sudo python3 main.py
+
+```
+
+To get a full list of command line arguments you can run:
+
+```
+python3 main.py -h
+usage: main.py [-h] [-p PORT] [-D]
+
+Mario Kart Tournament
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -p PORT, --port PORT  Port number to run the web server on, 5000 by default
+  -D, --debug           If the program should run in debug mode
 ```
 
 ### Features
