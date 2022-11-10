@@ -69,6 +69,11 @@ def stop_tournament():
 
     return redirect(url_for("admin"))
 
+@app.route('/admin/drivers', methods=['GET'])
+def drivers():
+    drivers = db.execute_query("select * from drivers order by name desc")
+    return render_template('drivers.html', active_page='drivers', drivers=drivers)
+
 def find_active_game():
     # return the current active game based on selected value
     return db.execute_query("select id, name from games where id = (select value from settings where name = ?)", ["active_game"], True)
