@@ -31,9 +31,9 @@ function render_fn(container, data, score, state) {
 		{% if settings['game_over'] == 'false' %}
 		<table class="table">
 			<tr>
-				<td><h2 align="center"><img src="/static/img/avatars/{{ player1['image'] }}.jpg" /><br>{{ player1['name'] }}</h2></td>
+				<td><h2 align="center"><a href="/tournaments/driver/{{ player1['id'] }}"><img src="/static/img/avatars/{{ player1['image'] }}.jpg" /><br>{{ player1['name'] }}</a></h2></td>
 				<td valign="bottom"><h2 style="margin:50px">VS</h2></td>
-				<td><h2 align="center"><img src="/static/img/avatars/{{ player2['image'] }}.jpg" /><br>{{ player2['name'] }}</h2></td>
+				<td><h2 align="center"><a href="/tournaments/driver/{{ player2['id'] }}"><img src="/static/img/avatars/{{ player2['image'] }}.jpg" /><br>{{ player2['name'] }}</a></h2></td>
 			</tr>
 			<tr>
 				<td colspan="3"><h2 align="center" class="text-primary">{{ settings['active_cup'] }} Cup</h2></td>
