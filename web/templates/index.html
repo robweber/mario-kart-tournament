@@ -8,13 +8,13 @@
   {% if drivers | length > 0: %}
   	<div class="row">
   	{% for driver in drivers: %}
-  		{% if mod.c % 2 == 0: %}
-  			<div class="col-lg-4">
-  		{% endif %}
-      <h4><a href="/tournaments/driver/{{ driver['id'] }}"><img src="/static/img/avatars/{{ driver['image'] }}.jpg" /><br />{{ driver['name'] }}</a></h4>
-  		{% if mod.c % 2 == 1: %}
-  			</div>
-  		{% endif %}
+      {% if mod.c % 4 == 0: %}
+        </div>
+        <div class="row">
+      {% endif %}
+        <div class="col-md-3 col-6">
+          <h4><a href="/tournaments/driver/{{ driver['id'] }}"><img src="/static/img/avatars/{{ driver['image'] }}.jpg" /><br />{{ driver['name'] }}</a></h4>
+        </div>
   		{% set mod.c = mod.c + 1 %}
   	{% endfor %}
   	</div>

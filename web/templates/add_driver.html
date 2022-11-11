@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <form name="add_driver" method="POST">
-<div class="form-group">
+<div class="form-group mt-2">
 	<label for="name">Name</label>
 	<input name="name" value="{{ request.form['name'] }}" class="form-control" />
 	<label for="phone">Phone #</label>
@@ -12,20 +12,19 @@
 
 <div class="avatar-selector">
 <legend>Pick an Avatar</legend>
+  <div class="row">
 {% for avatar in avatars: %}
-	{% if mod.c % 2 == 0: %}
-		<div class="row">
+	{% if mod.c % 4 == 0: %}
+	</div>
+  <div class="row">
 	{% endif %}
-		<div class="col-lg-6">
+		<div class="col-md-3 col-6">
 			<input type="radio" name="image" id="{{ avatar }}" value="{{ avatar }}"/>
 			<label class="avatar {{ avatar }}" for="{{ avatar }}"></label>
 		</div>
-	{% if mod.c % 2 == 1: %}
-		</div>
-	{% endif %}
 	{% set mod.c = mod.c + 1 %}
 {% endfor %}
-</div>
+  </div>
 </div>
 <div class="form-group">
   <input type="submit" name="Submit" class="btn btn-lg btn-success" />
