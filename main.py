@@ -149,9 +149,18 @@ def admin():
 
         flash("Settings Updated")
 
-    # send the settings, the currently active game, and a list of games
-    return render_template('admin.html', active_page='setup', active_game=find_active_game(),
-                            settings=load_settings(), games=db.execute_query("select * from games order by name asc"))
+    settings = load_settings()
+
+    if(settings['tournament_active'] == 'false'):
+        # send the settings, the currently active game, and a list of games
+        return render_template('admin.html', active_page='setup', active_game=find_active_game(),
+                            settings=settings, games=db.execute_query("select * from games order by name asc"))
+    else:
+        # load the current match
+        match = db.execute_query("select * from matches where bracket_level = ? and match_num = ?", [settings['active_level'], settings['active_match']])
+
+        return render_template('admin.html', active_page='setup', active_game=find_active_game(), settings=settings,
+                                player1=find_driver(settings['player_1']), player2=find_driver(settings['player_2']), match=match)
 
 @app.route('/admin/start_tournament', methods=['GET'])
 def start_tournament():
@@ -210,7 +219,7 @@ def start_tournament():
             driver_id = drivers[i]['id']
 
         # add the information to the matches bracket
-        db.execute_update("insert into matches (driver_id, bracket_level, match_num, score) values (?, ?, ?, 0)", [driver_id, 1, match_num])
+        db.execute_update("insert into matches (driver_id, bracket_level, match_num, score) values (?, ?, ?, -1)", [driver_id, 1, match_num])
         i = i + 1
 
     # create the rest of the matches (unknown drivers)
@@ -232,8 +241,8 @@ def start_tournament():
         while i <= games_left/2:
             # make 2 for each match
 
-            db.execute_update("insert into matches (driver_id, bracket_level, match_num) values (?, ?, ?)", [-1, current_level, i])
-            db.execute_update("insert into matches (driver_id, bracket_level, match_num) values (?, ?, ?)", [-1, current_level, i])
+            db.execute_update("insert into matches (driver_id, bracket_level, match_num, score) values (?, ?, ?, -1)", [-1, current_level, i])
+            db.execute_update("insert into matches (driver_id, bracket_level, match_num, score) values (?, ?, ?, -1)", [-1, current_level, i])
 
             i = i + 1
 
@@ -241,24 +250,9 @@ def start_tournament():
 
     # get the first two drivers
     match1 = db.execute_query("select * from matches where bracket_level = ? and match_num = ?", [1,1])
-    player1 = match1[0]
-    player2 = match1[1]
 
-    # set the active drivers
-    db.execute_update("update drivers set active = ? where id = ?", ['true', player1['driver_id']])
-    db.execute_update("update drivers set active = ? where id = ?", ['true', player2['driver_id']])
-
-    update_setting('player_1', player1['driver_id'])
-    update_setting('player_2', player2['driver_id'])
-
-    # set the active match to the first one
-    update_setting('active_match', 1)
-    update_setting('active_level', 1)
-
-    # get a cup for them to play
-    cups = db.execute_query("select * from cups where game_id = ?", [active_game['id']])
-    cup_id = random.randint(0,len(cups) - 1);
-    update_setting('active_cup', cups[cup_id]['name'])
+    # update the active info in the DB
+    update_active_match(match1[0]['driver_id'], match1[1]['driver_id'], 1, 1, active_game)
 
     flash('Tournament Started')
 
@@ -272,6 +266,53 @@ def stop_tournament():
 
     flash('Tournament Stopped')
 
+    return redirect(url_for("admin"))
+
+@app.route('/admin/winner/<winner>', methods=['GET'])
+def advance_tournament(winner):
+    settings = load_settings()
+
+    # load both drivers
+    player1=find_driver(settings['player_1'])
+    player2=find_driver(settings['player_2'])
+
+    # score of 1 is a WIN, 0 is a LOSS
+    player1_score = 1 if int(winner) == player1['id'] else 0
+    player2_score = 1 if int(winner) == player2['id'] else 0
+
+    # update the match
+    db.execute_update("update matches set score = ? where driver_id = ? and bracket_level = ? and match_num = ?",
+                      [player1_score, player1['id'], settings['active_level'], settings['active_match']])
+    db.execute_update("update matches set score = ? where driver_id = ? and bracket_level = ? and match_num = ?",
+                       [player2_score, player2['id'], settings['active_level'], settings['active_match']])
+
+    # determine who moves on
+    if(player1_score > player2_score):
+        # advance this player
+        advance_player(player1['id'], int(settings['active_level']), int(settings['active_match']))
+
+        # update wins/losses
+        db.execute_update("update drivers set wins = ? where id = ?", [player1['wins'] + 1, player1['id']])
+        db.execute_update("update drivers set losses = ? where id = ?", [player2['losses'] + 1, player2['id']])
+    else:
+        # advance this player
+        advance_player(player2['id'], int(settings['active_level']), int(settings['active_match']))
+
+        # update wins/losses
+        db.execute_update("update drivers set losses = ? where id = ?", [player1['losses'] + 1, player1['id']])
+        db.execute_update("update drivers set wins = ? where id = ?", [player2['wins'] + 1, player2['id']])
+
+    # find the next matchup
+    next_match = find_next_match(int(settings['active_level']), int(settings['active_match']))
+
+    if(next_match is not None):
+        update_active_match(next_match[0]['driver_id'], next_match[1]['driver_id'],
+                            next_match[0]['bracket_level'], next_match[0]['match_num'], find_active_game())
+    else:
+        # Game over
+        update_setting("game_over", "true")
+
+    flash("Next Race!")
     return redirect(url_for("admin"))
 
 @app.route('/admin/drivers', methods=['GET'])
@@ -309,6 +350,72 @@ def update_setting(name, value):
     """updates a single setting in the database"""
 
     db.execute_update("update settings set value = ? where name = ?", [value, name])
+
+def update_active_match(player1, player2, level, match, active_game):
+    db.execute_update("update drivers set active = ?", ["false"])
+
+    # set the active drivers
+    db.execute_update("update drivers set active = ? where id = ?", ['true', player1])
+    db.execute_update("update drivers set active = ? where id = ?", ['true', player2])
+
+    update_setting('player_1', player1)
+    update_setting('player_2', player2)
+
+    # set the active match to the first one
+    update_setting('active_match', match)
+    update_setting('active_level', level)
+
+    # get a cup for them to play
+    cups = db.execute_query("select * from cups where game_id = ?", [active_game['id']])
+    cup_id = random.randint(0,len(cups) - 1);
+    update_setting('active_cup', cups[cup_id]['name'])
+
+def find_next_match(level, match):
+    result = None
+
+    # see if we can just increase the match
+    while(db.find_count("select count(id) as total from matches where bracket_level = ? and match_num = ?",
+                        [level, match + 1]) > 0 and result is None):
+        # get the match and make sure it isn't a bye
+        temp_match = db.execute_query("select * from matches where bracket_level= ? and match_num = ?",
+                                      [level, match + 1])
+
+        if(temp_match[0]['driver_id'] != -1 and temp_match[1]['driver_id'] != -1):
+            # we're good to run this match
+            result = temp_match
+        else:
+            match = match + 1
+
+            # advance player if this is a bye
+            if(temp_match[0]['driver_id'] != -1):
+                advance_player(temp_match[0]['driver_id'], level, match)
+            elif(temp_match[1]['driver_id'] != -1):
+                advance_player(temp_match[1]['driver_id'], level, match)
+
+    # if result still null go up one level
+    if(result is None):
+        if(db.find_count("select count(id) as total from matches where bracket_level = ? and match_num = ?",
+                         [level + 1, 1])):
+            result = db.execute_query("select * from matches where bracket_level = ? and match_num = ?",
+                                      [level + 1, 1])
+
+    return result
+
+def advance_player(player, level, match):
+    level = level + 1
+
+    # match int needs to be even
+    if(match % 2 != 0):
+        match = match + 1
+    match = match / 2 # represents next match in sequence
+
+    # check if there is a next match
+    if(db.find_count("select count(id) as total from matches where driver_id = -1 and bracket_level = ? and match_num = ? order by id asc",
+                    [level, match]) > 0):
+        next_match = db.execute_query("select * from matches where driver_id = -1 and bracket_level = ? and match_num = ?",
+                                      [level, match], True)
+        db.execute_update("update matches set driver_id = ? where id = ?",
+                           [player, next_match['id']])
 
 # parse the CLI args
 parser = argparse.ArgumentParser(description='Mario Kart Tournament')
