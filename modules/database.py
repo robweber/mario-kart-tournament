@@ -41,3 +41,20 @@ def execute_query(query, args=(), one=False):
     rv = cur.fetchall()
     cur.close()
     return (rv[0] if rv else None) if one else rv
+
+def find_count(query, args=()):
+    """executes a query that will return an integer value representing a count
+
+    :param query: sql query, should include a count() keyword aliasa to "total"
+    :param args: arguments to fill in "?" syntax in the query
+
+    :returns: either an integer or None if query doesn't contain a value
+    """
+    result = None
+    # execute the query
+    response = execute_query(query, args, True)
+
+    if(response != None and 'total' in response):
+        result = response['total']
+
+    return result
