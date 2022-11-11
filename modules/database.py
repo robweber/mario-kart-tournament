@@ -59,3 +59,7 @@ def find_count(query, args=()):
         result = response['total']
 
     return result
+
+
+def find_cups(game_id):
+    return execute_query(utils.FIND_CUPS_QUERY, [game_id])
