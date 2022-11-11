@@ -1,6 +1,6 @@
 ## Mario Kart Tournament
 
-This is a simple web app that allows for the administration of a Mario Kart Tournament. The app consists of a page for end users to setup their driver and enter scores, a scoreboard to view the current racers and totals, and an admin page for administration.
+This is a simple web app that allows for the administration of a Mario Kart Tournament. The app consists of a page for end users to setup their driver, a scoreboard to view the current racer with a bracket, plus an admin page for administration.
 
 ## Install
 
@@ -40,32 +40,32 @@ optional arguments:
   -D, --debug           If the program should run in debug mode
 ```
 
-### Features
+## Tournament Setup
 
-__Configurable Game__
+To start the tournament the Race Administrator can set the Mario Kart version to be played on the admin page at `/admin`. Once this is set drivers can be added on the main page.
 
-Select which Mario Kart game you're using. This allows the app to randomly pick which cup the drivers will play as well as double check score entries against max possible score for that game.
+### Adding a Drivers
 
-__Configurable Rounds__
+Drivers can be added as long as the tournament is not started yet. When hitting the main page the currently added drivers will be shown along with a button to create new driver profiles. Once created a driver is ready to play in the tournament.
 
-Configure how many rounds each player will play when setting up the tournament.
+## Playing the Tournament
 
-__Configurable Handicap__
+When the Race Administrator starts the tournament several things happen at once.
 
-You can set a handicap to seperate normal from advanced players. This will multiply the normal players score by what you enter. Put 1 here for no handicap.
+1. Creating new drivers is locked out.
+2. Drivers are randomly seeded into a tournament bracket.
+3. The first set of racers is selected and a Cup is selected from tracks from the active Mario Kart game.
 
-### Play
+On the scoreboard page racers can see who is up next and the overall status of the tournament via the bracket. Winning drivers are given a score of 1 and losses are a 0. 
 
-Drivers can only be created before the tournament is activated. Once the tournment is turned on in the Admin area you cannot add more drivers to the races. Turning the tournament off before it is completed will erase all scores.
+### Advancing
 
-Once the tournament is turned on drivers will be randomly matched up for play. The app will also randomly select which cup in the Mario Kart game they will play against. Only advanced players can get "Special Cup" races.
+On the `/admin` page the Race Administrator can select the winner from the currently active match. Selecting the winner will advance the tournament.
 
-After the race is complete drivers can enter their score by using the driver URL to login as their player and enter the score. The scoreboard page refreshes every 10 seconds to keep current racers and scores up to date. Once both players have entered their score the next two racers and their cup are selected. If only one racer remains that driver will show a question mark as their opponent. This is meant to allow anyone to play against them with only the listed driver's score being entered.
+The winning driver will move on to the next race in the bracket and the losing player will drop off. Each driver's win/loss record will also be updated.
 
-Once all rounds have been played for each driver the total is calculated and the winner displayed.
+## Ending the Tournament
 
-### Endpoints
+The tournament is over when the final match is played. The winning racer will be shown on both the scoreboard and admin pages. From here the Race Administrator can stop and reset the tournament.
 
-* Driver - / or /tournaments will allow you to setup a driver and interact with the tournament
-* Scoreboard - /tournaments/scoreboard to see the scoreboard
-* Admin - /admin
+__Note:__ stopping the tournament will cause a complete reset should it be started again. It is not possible to pause and resume.
