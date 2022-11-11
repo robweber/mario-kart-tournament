@@ -7,7 +7,7 @@ DATABASE_PATH = os.path.join(DIR_PATH, 'mario-kart-tournament.live.db')
 
 # list of driver avatars
 AVATARS = ['baby_daisy', 'baby_luigi', 'baby_mario', 'baby_peach', 'bowser', 'daisy', 'donkey',
-           'koopa', 'luigi', 'mario', 'mario2', 'peach', 'waluigi', 'wario', 'yoshi']
+           'koopa', 'luigi', 'mario', 'mario2', 'peach', 'toad', 'toadette', 'roy', 'waluigi', 'wario', 'yoshi']
 
 # some pre-canned queries to avoid re-typeing
 ACTIVE_GAME_QUERY = "select id, name from games where id = (select value from settings where name = ?)"
