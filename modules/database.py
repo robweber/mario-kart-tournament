@@ -42,6 +42,7 @@ def execute_query(query, args=(), one=False):
     cur.close()
     return (rv[0] if rv else None) if one else rv
 
+
 def find_count(query, args=()):
     """executes a query that will return an integer value representing a count
 
@@ -54,7 +55,7 @@ def find_count(query, args=()):
     # execute the query
     response = execute_query(query, args, True)
 
-    if(response != None and 'total' in response):
+    if(response is not None and 'total' in response):
         result = response['total']
 
     return result
