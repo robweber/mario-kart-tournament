@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block header %}
+<link rel="stylesheet" href="/static/css/jquery.bracket.min.css" />
+<script src="/static/js/jquery.bracket.min.js"></script>
+<script type="text/javascript">
+function render_fn(container, data, score, state) {
+  switch(state) {
+    case "empty-bye":
+      container.append("BYE");
+      return;
+    case "empty-tbd":
+      container.append("TBD");
+      return;
+
+    case "entry-no-score":
+    case "entry-default-win":
+    case "entry-complete":
+      container.append('<img src="/static/img/avatars/'+data.image + '_icon.jpg" /> ').append(data.name)
+      //container.append(data.name);
+      return;
+  }
+}
+</script>
+{% endblock %}
+{% block content %}
+<div class="jumbotron">
+	<h2>{{ active_game['name'] }} Tournament</h2>
+	{% if settings['tournament_active'] == 'false' %}
+		<h2><a href="#" class="label label-warning">Tournament hasn't started - create your driver!</a></h2>
+	{% else %}
+		{% if settings['game_over'] == 'false' %}
+		<table class="table">
+			<tr>
+				<td><h2 align="center"><img src="/static/img/avatars/{{ player1['image'] }}.jpg" /><br>{{ player1['name'] }}</h2></td>
+				<td valign="bottom"><h2 style="margin:50px">VS</h2></td>
+				<td><h2 align="center"><img src="/static/img/avatars/{{ player2['image'] }}.jpg" /><br>{{ player2['name'] }}</h2></td>
+			</tr>
+			<tr>
+				<td colspan="3"><h2 align="center" class="text-primary">{{ settings['active_cup'] }} Cup</h2></td>
+			</tr>
+		</table>
+		{% else %}
+			{% if match[0]['score'] > match[1]['score'] %}
+				{% set winner = match[0] %}
+			{% else %}
+				{% set winner = match[1] %}
+			{% endif %}
+			<h2><img src="/static/img/avatars/{{ winner['image'] }}.jpg" /><br><br>{{ winner['name'] }} is the Winner!</h2>
+		{% endif %}
+	{% endif %}
+</div>
+<div id="tournament_bracket" align="left">
+
+</div>
+<div id="test">
+
+</div>
+{% endblock %}
+{% block onload_scripts %}
+{% if settings['tournament_active'] == 'true' %}
+  //load tournmanet bracket if active
+  $.get('/tournaments/bracket',function(data,status){
+    $('#tournament_bracket').bracket({
+          init: data, /* data to initialize the bracket with */
+          teamWidth: 80,
+          scoreWidth: 30,
+          matchMargin: 50,
+          roundMargin: 90,
+          decorator: {render: render_fn, edit: function(container, data, doneCb){}}
+        });
+  });
+{% endif %}
+{% endblock %}
