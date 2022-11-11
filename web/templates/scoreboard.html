@@ -53,9 +53,7 @@ function render_fn(container, data, score, state) {
 <div id="tournament_bracket" align="left">
 
 </div>
-<div id="test">
-
-</div>
+<a name="bracket"></a>
 {% endblock %}
 {% block onload_scripts %}
 {% if settings['tournament_active'] == 'true' %}
@@ -70,5 +68,7 @@ function render_fn(container, data, score, state) {
           decorator: {render: render_fn, edit: function(container, data, doneCb){}}
         });
   });
+
+  setTimeout("location.reload(true);", 15000);
 {% endif %}
 {% endblock %}
