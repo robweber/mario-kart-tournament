@@ -46,12 +46,13 @@
     </tr>
   </table>
   {% else %}
+    {% set winner = namespace() %}
     {% if match[0]['score'] > match[1]['score'] %}
-      {% set winner = match[0] %}
+      {% set winner = player1 %}
     {% else %}
-      {% set winner = match[1] %}
+      {% set winner = player2 %}
     {% endif %}
-    <h2><img src="/static/img/avatars/{{ winner['image'] }}.jpg" /><br><br>{{ winner['name'] }} is the Winner!</h2>
+    <h2 class="text-success"><img src="/static/img/avatars/{{ winner['image'] }}.jpg" class="mt-4"/><br><br>{{ winner['name'] }} is the Winner!</h2>
   {% endif %}
 </div>
 <div class="form-group mt-4">
