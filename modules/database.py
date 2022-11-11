@@ -61,5 +61,33 @@ def find_count(query, args=()):
     return result
 
 
+# These are all helper methods to make some common lookups easier
+def load_settings():
+    """this is needed on almost every page load
+
+    :returns: the settings in a dict {key:value}
+    """
+    result = {}
+    # convert the settings list to a dict
+    for s in execute_query("select * from settings"):
+        result[s['name']] = s['value']
+
+    return result
+
+
+def update_setting(name, value):
+    """updates a single setting in the database"""
+    execute_update("update settings set value = ? where name = ?", [value, name])
+
+
+def find_active_game():
+    # return the current active game based on selected value
+    return execute_query(utils.ACTIVE_GAME_QUERY, ["active_game"], True)
+
+
+def find_driver(id):
+    return execute_query("select * from drivers where id = ?", [id], True)
+
+
 def find_cups(game_id):
     return execute_query(utils.FIND_CUPS_QUERY, [game_id])

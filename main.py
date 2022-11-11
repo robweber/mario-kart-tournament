@@ -17,7 +17,7 @@ app.secret_key = os.urandom(24)
 
 @app.route('/', methods=["GET"])
 def index():
-    settings = load_settings()
+    settings = db.load_settings()
 
     if(settings['tournament_active'] == 'true'):
         # redirect to scoreboard page
@@ -28,7 +28,7 @@ def index():
 
 @app.route('/tournaments/rules', methods=['GET'])
 def rules():
-    return render_template('rules.html', active_page='rules', active_game=find_active_game())
+    return render_template('rules.html', active_page='rules', active_game=db.find_active_game())
 
 
 @app.route('/tournaments/add_driver', methods=["GET", "POST"])
@@ -51,20 +51,20 @@ def add_driver():
 
 @app.route('/tournaments/driver/<id>', methods=['GET'])
 def view_driver(id):
-    return render_template('driver_info.html', driver=find_driver(id))
+    return render_template('driver_info.html', driver=db.find_driver(id))
 
 
 @app.route('/tournaments/scoreboard', methods=['GET'])
 def scoreboard():
 
     drivers = db.execute_query("select * from drivers")
-    settings = load_settings()
+    settings = db.load_settings()
 
     # load the current match
     match = db.execute_query("select * from matches where bracket_level = ? and match_num = ?", [settings['active_level'], settings['active_match']])
 
-    return render_template('scoreboard.html', drivers=drivers, active_game=find_active_game(), player1=find_driver(settings['player_1']),
-                           player2=find_driver(settings['player_2']), match=match, settings=settings)
+    return render_template('scoreboard.html', drivers=drivers, active_game=db.find_active_game(), player1=db.find_driver(settings['player_1']),
+                           player2=db.find_driver(settings['player_2']), match=match, settings=settings)
 
 
 @app.route("/tournaments/bracket", methods=['GET'])
@@ -150,38 +150,38 @@ def admin():
     # check if updating the tournament setup
     if request.method == 'POST':
         # update the sms and active game settings
-        db.execute_update("update settings set value = ? where name = ?", [request.form['active_game'], 'active_game'])
-        db.execute_update("update settings set value = ? where name = ?", [request.form['send_sms'], 'send_sms'])
+        db.update_setting('active_game', request.form['active_game'])
+        db.update_setting('send_sms', request.form['send_sms'])
 
         flash("Settings Updated")
 
-    settings = load_settings()
+    settings = db.load_settings()
 
     if(settings['tournament_active'] == 'false'):
         # send the settings, the currently active game, and a list of games
-        return render_template('admin.html', active_page='setup', active_game=find_active_game(),
+        return render_template('admin.html', active_page='setup', active_game=db.find_active_game(),
                                settings=settings, games=db.execute_query("select * from games order by name asc"))
     else:
         # load the current match
         match = db.execute_query("select * from matches where bracket_level = ? and match_num = ?",
                                  [settings['active_level'], settings['active_match']])
 
-        return render_template('admin.html', active_page='setup', active_game=find_active_game(), settings=settings,
-                               player1=find_driver(settings['player_1']), player2=find_driver(settings['player_2']), match=match)
+        return render_template('admin.html', active_page='setup', active_game=db.find_active_game(), settings=settings,
+                               player1=db.find_driver(settings['player_1']), player2=db.find_driver(settings['player_2']), match=match)
 
 
 @app.route('/admin/start_tournament', methods=['GET'])
 def start_tournament():
     # first update the settings
-    update_setting('tournament_active', 'true')
-    update_setting('game_over', 'false')
+    db.update_setting('tournament_active', 'true')
+    db.update_setting('game_over', 'false')
 
     # update the driver stats and reset all matches
     db.execute_update('update drivers set wins = 0, losses = 0, active = "false"')
     db.execute_update('delete from matches')
 
     # get the active game
-    active_game = find_active_game()
+    active_game = db.find_active_game()
 
     # get all the drivers in a random order
     drivers = db.execute_query('select * from drivers order by RANDOM()')
@@ -227,7 +227,7 @@ def start_tournament():
             driver_id = drivers[i]['id']
 
         # add the information to the matches bracket
-        db.execute_update("insert into matches (driver_id, bracket_level, match_num, score) values (?, ?, ?, -1)", [driver_id, 1, match_num])
+        db.execute_update(utils.CREATE_MATCH_STATEMENT, [driver_id, 1, match_num])
         i = i + 1
 
     # create the rest of the matches (unknown drivers)
@@ -248,8 +248,8 @@ def start_tournament():
         i = 1
         while i <= games_left / 2:
             # make 2 for each match
-            db.execute_update("insert into matches (driver_id, bracket_level, match_num, score) values (?, ?, ?, -1)", [-1, current_level, i])
-            db.execute_update("insert into matches (driver_id, bracket_level, match_num, score) values (?, ?, ?, -1)", [-1, current_level, i])
+            db.execute_update(utils.CREATE_MATCH_STATEMENT, [-1, current_level, i])
+            db.execute_update(utils.CREATE_MATCH_STATEMENT, [-1, current_level, i])
 
             i = i + 1
 
@@ -279,11 +279,11 @@ def stop_tournament():
 
 @app.route('/admin/winner/<winner>', methods=['GET'])
 def advance_tournament(winner):
-    settings = load_settings()
+    settings = db.load_settings()
 
     # load both drivers
-    player1 = find_driver(settings['player_1'])
-    player2 = find_driver(settings['player_2'])
+    player1 = db.find_driver(settings['player_1'])
+    player2 = db.find_driver(settings['player_2'])
 
     # score of 1 is a WIN, 0 is a LOSS
     player1_score = 1 if int(winner) == player1['id'] else 0
@@ -316,10 +316,10 @@ def advance_tournament(winner):
 
     if(next_match is not None):
         update_active_match(next_match[0]['driver_id'], next_match[1]['driver_id'],
-                            next_match[0]['bracket_level'], next_match[0]['match_num'], find_active_game())
+                            next_match[0]['bracket_level'], next_match[0]['match_num'], db.find_active_game())
     else:
         # Game over
-        update_setting("game_over", "true")
+        db.update_setting("game_over", "true")
 
     flash("Next Race!")
     return redirect(url_for("admin"))
@@ -339,34 +339,6 @@ def delete_driver(id):
     return redirect(url_for('drivers'))
 
 
-def find_active_game():
-    # return the current active game based on selected value
-    return db.execute_query("select id, name from games where id = (select value from settings where name = ?)", ["active_game"], True)
-
-
-def find_driver(id):
-    return db.execute_query("select * from drivers where id = ?", [id], True)
-
-
-def load_settings():
-    """this is needed on almost every page load
-
-    :returns: the settings in a dict {key:value}
-    """
-    result = {}
-    # convert the settings list to a dict
-    for s in db.execute_query("select * from settings"):
-        result[s['name']] = s['value']
-
-    return result
-
-
-def update_setting(name, value):
-    """updates a single setting in the database"""
-
-    db.execute_update("update settings set value = ? where name = ?", [value, name])
-
-
 def update_active_match(player1, player2, level, match, active_game):
     db.execute_update("update drivers set active = ?", ["false"])
 
@@ -374,17 +346,17 @@ def update_active_match(player1, player2, level, match, active_game):
     db.execute_update("update drivers set active = ? where id = ?", ['true', player1])
     db.execute_update("update drivers set active = ? where id = ?", ['true', player2])
 
-    update_setting('player_1', player1)
-    update_setting('player_2', player2)
+    db.update_setting('player_1', player1)
+    db.update_setting('player_2', player2)
 
     # set the active match to the first one
-    update_setting('active_match', match)
-    update_setting('active_level', level)
+    db.update_setting('active_match', match)
+    db.update_setting('active_level', level)
 
     # get a cup for them to play
     cups = db.find_cups(active_game['id'])
     cup_id = random.randint(0, len(cups) - 1)
-    update_setting('active_cup', cups[cup_id]['name'])
+    db.update_setting('active_cup', cups[cup_id]['name'])
 
 
 def find_next_match(level, match):

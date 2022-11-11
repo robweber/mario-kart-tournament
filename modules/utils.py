@@ -10,4 +10,6 @@ AVATARS = ['baby_daisy', 'baby_luigi', 'baby_mario', 'baby_peach', 'bowser', 'da
            'koopa', 'luigi', 'mario', 'mario2', 'peach', 'waluigi', 'wario', 'yoshi']
 
 # some pre-canned queries to avoid re-typeing
-FIND_CUPS_QUERY = "select cups.name as name from cups join game_cup on cups.id = game_cup.cup_id join games on games.id = game_cup.game_id where games.id = ?"
+ACTIVE_GAME_QUERY = "select id, name from games where id = (select value from settings where name = ?)"
+CREATE_MATCH_STATEMENT = "insert into matches (driver_id, bracket_level, match_num, score) values (?, ?, ?, -1)"
+FIND_CUPS_QUERY = "select cups.name as name from cups join game_cup on cups.id = game_cup.cup_id join games on games.id = game_cup.game_id where games.id = ?"  # noqa
