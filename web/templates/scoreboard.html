@@ -20,44 +20,70 @@ function render_fn(container, data, score, state) {
       return;
   }
 }
-</script>
-{% endblock %}
-{% block content %}
-<div class="jumbotron">
-	<h2>{{ active_game['name'] }} Tournament</h2>
-	{% if settings['tournament_active'] == 'false' %}
-		<h2><a href="/tournaments/add_driver" class="label label-warning">Tournament hasn't started - create your driver!</a></h2>
-	{% else %}
-		{% if settings['game_over'] == 'false' %}
-		<table class="table">
-			<tr>
-				<td><h2 align="center"><a href="/tournaments/driver/{{ player1['id'] }}"><img src="/static/img/avatars/{{ player1['image'] }}.jpg" /><br>{{ player1['name'] }}</a></h2></td>
-				<td valign="bottom"><h2 style="margin:50px">VS</h2></td>
-				<td><h2 align="center"><a href="/tournaments/driver/{{ player2['id'] }}"><img src="/static/img/avatars/{{ player2['image'] }}.jpg" /><br>{{ player2['name'] }}</a></h2></td>
-			</tr>
-			<tr>
-				<td colspan="3"><h2 align="center" class="text-primary">{{ settings['active_cup'] }} Cup</h2></td>
-			</tr>
-		</table>
-		{% else %}
-      {% set winner = namespace() %}
-			{% if match[0]['score'] > match[1]['score'] %}
-				{% set winner = player1 %}
-			{% else %}
-				{% set winner = player2 %}
-			{% endif %}
-			<h2 class="text-success"><img src="/static/img/avatars/{{ winner['image'] }}.jpg" class="mt-4" /><br><br>{{ winner['name'] }} is the Winner!</h2>
-		{% endif %}
-	{% endif %}
-</div>
-<div id="tournament_bracket" align="left">
 
-</div>
-<a name="bracket"></a>
-{% endblock %}
-{% block onload_scripts %}
-{% if settings['tournament_active'] == 'true' %}
-  //load tournmanet bracket if active
+function refresh_info(){
+  //try and load the current match
+  $.get('/tournaments/current_match', function(data, status){
+    if(data.settings.tournament_active == 'true')
+    {
+      match_area = $('#match_area');
+      match_area.empty();
+
+      if(data.settings.game_over == 'true')
+      {
+        // display the winner
+        var winner = data.player1;
+
+        if(data.match[0].score < data.match[1].score)
+        {
+          winner = data.player2;
+        }
+
+        announcement = $('<h2>').html('<img src="/static/img/avatars/' + winner.image + '.jpg" class="mt-4" /><br /><br />' + winner.name + ' is the Winner!');
+        announcement.addClass('text-success');
+        
+        match_area.append(announcement);
+      }
+      else
+      {
+
+        // create a table
+        var table = $('<table>').addClass('table');
+        var tr = $('<tr>');
+        var td = $('<td>');
+
+        // row 1 is the driver info
+        row1 = tr.clone();
+
+        player1 = '<h2 align="center"><a href="/tournaments/driver/' + data.player1.id + '"><img src="/static/img/avatars/' + data.player1.image + '.jpg" /><br>' + data.player1.name + '</a></h2>';
+        player2 = '<h2 align="center"><a href="/tournaments/driver/' + data.player2.id + '"><img src="/static/img/avatars/' + data.player2.image + '.jpg" /><br>' + data.player2.name + '</a></h2>';
+
+        row1.append(td.clone().append(player1));
+        row1.append(td.clone().append('<h2 style="margin:50px">VS</h2>'));
+        row1.append(td.clone().append(player2));
+
+        // display the cup information
+        row2 = tr.clone();
+        row2.append('<td colspan="3"><h2 align="center" class="text-primary">' + data.settings.active_cup + ' Cup</h2></td>');
+
+        table.append(row1);
+        table.append(row2);
+
+        match_area.append(table);
+      }
+
+      //load the bracket as well
+      load_bracket();
+    }
+    else
+    {
+      location.reload(true);
+    }
+  });
+}
+
+function load_bracket(){
+  //load tournmanet bracket
   $.get('/tournaments/bracket',function(data,status){
     $('#tournament_bracket').bracket({
           init: data, /* data to initialize the bracket with */
@@ -68,7 +94,28 @@ function render_fn(container, data, score, state) {
           decorator: {render: render_fn, edit: function(container, data, doneCb){}}
         });
   });
+}
+</script>
+{% endblock %}
+{% block content %}
+<div class="jumbotron">
+	<h2>{{ active_game['name'] }} Tournament</h2>
+	{% if settings['tournament_active'] == 'false' %}
+		<h2><a href="/tournaments/add_driver" class="label label-warning">Tournament hasn't started - create your driver!</a></h2>
+	{% else %}
+    <div id="match_area">
+    </div>
+	{% endif %}
+</div>
+<a name="bracket"></a>
+<div id="tournament_bracket" align="left">
 
-  setTimeout("location.reload(true);", 15000);
+</div>
+{% endblock %}
+{% block onload_scripts %}
+{% if settings['tournament_active'] == 'true' %}
+  refresh_info();
+
+  setInterval(refresh_info, 10000);
 {% endif %}
 {% endblock %}

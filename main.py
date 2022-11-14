@@ -56,15 +56,18 @@ def view_driver(id):
 
 @app.route('/tournaments/scoreboard', methods=['GET'])
 def scoreboard():
+    return render_template('scoreboard.html', settings=db.load_settings(), active_game=db.find_active_game())
 
-    drivers = db.execute_query("select * from drivers")
+
+@app.route('/tournaments/current_match', methods=['GET'])
+def current_match():
     settings = db.load_settings()
 
     # load the current match
     match = db.execute_query("select * from matches where bracket_level = ? and match_num = ?", [settings['active_level'], settings['active_match']])
 
-    return render_template('scoreboard.html', drivers=drivers, active_game=db.find_active_game(), player1=db.find_driver(settings['player_1']),
-                           player2=db.find_driver(settings['player_2']), match=match, settings=settings)
+    return jsonify({'player1': db.find_driver(settings['player_1']), 'player2': db.find_driver(settings['player_2']),
+                   'match': match, 'settings': settings})
 
 
 @app.route("/tournaments/bracket", methods=['GET'])
