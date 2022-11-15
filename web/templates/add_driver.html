@@ -22,7 +22,7 @@
 	{% endif %}
 		<div class="col-md-3 col-6">
 			<input type="radio" name="image" id="{{ avatar }}" value="{{ avatar }}"/>
-			<label class="avatar {{ avatar }}" for="{{ avatar }}"></label>
+			<label class="avatar" style="background-image:url(/static/img/avatars/{{ avatar }}.jpg)" for="{{ avatar }}"></label>
 		</div>
 	{% set mod.c = mod.c + 1 %}
 {% endfor %}

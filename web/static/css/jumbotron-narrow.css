@@ -42,25 +42,6 @@ div.jQBracket .team div.label{
             appearance:none;
 }
 
-.baby_daisy{background-image:url(../img/avatars/baby_daisy.jpg);}
-.baby_luigi{background-image:url(../img/avatars/baby_luigi.jpg);}
-.baby_mario{background-image:url(../img/avatars/baby_mario.jpg);}
-.baby_peach{background-image:url(../img/avatars/baby_peach.jpg);}
-.bowser{background-image:url(../img/avatars/bowser.jpg);}
-.daisy{background-image:url(../img/avatars/daisy.jpg);}
-.donkey{background-image:url(../img/avatars/donkey.jpg);}
-.koopa{background-image:url(../img/avatars/koopa.jpg);}
-.luigi{background-image:url(../img/avatars/luigi.jpg);}
-.mario{background-image:url(../img/avatars/mario.jpg);}
-.mario2{background-image:url(../img/avatars/mario2.jpg);}
-.peach{background-image:url(../img/avatars/peach.jpg);}
-.toad{background-image:url(../img/avatars/toad.jpg);}
-.toadette{background-image:url(../img/avatars/toadette.jpg);}
-.roy{background-image:url(../img/avatars/roy.jpg);}
-.waluigi{background-image:url(../img/avatars/waluigi.jpg);}
-.wario{background-image:url(../img/avatars/wario.jpg);}
-.yoshi{background-image:url(../img/avatars/yoshi.jpg);}
-
 .avatar-selector input:active +.avatar{opacity: .9;}
 .avatar-selector input:checked +.avatar{
     -webkit-filter: none;
