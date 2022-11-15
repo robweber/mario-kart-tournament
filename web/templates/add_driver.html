@@ -4,8 +4,10 @@
 <div class="form-group mt-2">
 	<label for="name">Name</label>
 	<input name="name" value="{{ request.form['name'] }}" class="form-control" />
+  {% if settings['send_sms'] == 'true' %}
 	<label for="phone">Phone #</label>
 	<input name="phone" value="{{ request.form['phone'] }}" class="form-control" />
+  {% endif %}
 </div>
 
 {% set mod = namespace(c=0) %}

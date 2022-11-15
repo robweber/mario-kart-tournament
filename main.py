@@ -35,6 +35,8 @@ def rules():
 def add_driver():
     # check if submitting the form
     if request.method == "POST":
+        phone = request.form['phone'] if 'phone' in request.form else ""
+
         if not request.form['name']:
             flash("Please fill in your name", "error")
         elif 'image' not in request.form:
@@ -43,10 +45,10 @@ def add_driver():
             # save the new driver
             flash(f"Driver { request.form['name'] } saved")
             db.execute_update("insert into drivers (name, phone, image) values (?, ?, ?)",
-                              [request.form['name'], request.form['phone'], request.form['image']])
+                              [request.form['name'], phone, request.form['image']])
             return redirect(url_for('index'))
 
-    return render_template("add_driver.html", avatars=utils.AVATARS)
+    return render_template("add_driver.html", avatars=utils.AVATARS, settings=db.load_settings())
 
 
 @app.route('/tournaments/driver/<id>', methods=['GET'])
