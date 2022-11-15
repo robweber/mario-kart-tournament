@@ -23,7 +23,7 @@ def index():
         # redirect to scoreboard page
         return redirect(url_for('scoreboard'))
     else:
-        return render_template("index.html", drivers=db.execute_query("select * from drivers"), settings=settings)
+        return render_template("index.html", drivers=db.execute_query("select * from drivers order by name asc"), settings=settings)
 
 
 @app.route('/tournaments/rules', methods=['GET'])
