@@ -1,0 +1,158 @@
+/* Space out content a bit */
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+div.jQBracket .team div.label{
+	display:block;
+	font-size:100%;
+	color:#000000;
+	text-align:left;
+}
+
+.alert {
+	font-size: 1.2em;
+}
+
+.alert-error {
+  background-image: -webkit-linear-gradient(top, #f2dede 0%, #e7c3c3 100%);
+  background-image:      -o-linear-gradient(top, #f2dede 0%, #e7c3c3 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#f2dede), to(#e7c3c3));
+  background-image:         linear-gradient(to bottom, #f2dede 0%, #e7c3c3 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff2dede', endColorstr='#ffe7c3c3', GradientType=0);
+  background-repeat: repeat-x;
+  border-color: #dca7a7;
+}
+
+.alert-message {
+  background-image: -webkit-linear-gradient(top, #dff0d8 0%, #c8e5bc 100%);
+  background-image:      -o-linear-gradient(top, #dff0d8 0%, #c8e5bc 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#dff0d8), to(#c8e5bc));
+  background-image:         linear-gradient(to bottom, #dff0d8 0%, #c8e5bc 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffdff0d8', endColorstr='#ffc8e5bc', GradientType=0);
+  background-repeat: repeat-x;
+  border-color: #b2dba1;
+}
+
+.avatar-selector input{
+    margin:0;padding:0;
+    -webkit-appearance:none;
+       -moz-appearance:none;
+            appearance:none;
+}
+
+.baby_daisy{background-image:url(../img/avatars/baby_daisy.jpg);}
+.baby_luigi{background-image:url(../img/avatars/baby_luigi.jpg);}
+.baby_mario{background-image:url(../img/avatars/baby_mario.jpg);}
+.baby_peach{background-image:url(../img/avatars/baby_peach.jpg);}
+.bowser{background-image:url(../img/avatars/bowser.jpg);}
+.daisy{background-image:url(../img/avatars/daisy.jpg);}
+.donkey{background-image:url(../img/avatars/donkey.jpg);}
+.koopa{background-image:url(../img/avatars/koopa.jpg);}
+.luigi{background-image:url(../img/avatars/luigi.jpg);}
+.mario{background-image:url(../img/avatars/mario.jpg);}
+.mario2{background-image:url(../img/avatars/mario2.jpg);}
+.peach{background-image:url(../img/avatars/peach.jpg);}
+.toad{background-image:url(../img/avatars/toad.jpg);}
+.toadette{background-image:url(../img/avatars/toadette.jpg);}
+.roy{background-image:url(../img/avatars/roy.jpg);}
+.waluigi{background-image:url(../img/avatars/waluigi.jpg);}
+.wario{background-image:url(../img/avatars/wario.jpg);}
+.yoshi{background-image:url(../img/avatars/yoshi.jpg);}
+
+.avatar-selector input:active +.avatar{opacity: .9;}
+.avatar-selector input:checked +.avatar{
+    -webkit-filter: none;
+       -moz-filter: none;
+            filter: none;
+}
+
+.avatar{
+    cursor:pointer;
+    background-size:contain;
+    background-repeat:no-repeat;
+    display:inline-block;
+    width:100px;height:70px;
+    -webkit-transition: all 100ms ease-in;
+       -moz-transition: all 100ms ease-in;
+            transition: all 100ms ease-in;
+    -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+       -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+            filter: brightness(1.8) grayscale(1) opacity(.7);
+}
+
+.avatar:hover{
+    -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+       -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            filter: brightness(1.2) grayscale(.5) opacity(.9);
+}
+
+.nav > li {
+	font-size: 1.2em;
+}
+
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.header,
+.marketing,
+.footer {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+/* Custom page header */
+.header {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e5e5e5;
+}
+/* Make the masthead heading the same height as the navigation */
+.header h3, #flashMessage.message {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 40px;
+}
+
+/* Custom page footer */
+.footer {
+  padding-top: 19px;
+  color: #777;
+  border-top: 1px solid #e5e5e5;
+}
+
+/* Customize container */
+
+.container-narrow > hr {
+  margin: 30px 0;
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+  text-align: center;
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom:10px;
+  padding-top:20px;
+  padding-bottom:20px;
+}
+.jumbotron .btn {
+  padding: 14px 24px;
+  font-size: 21px;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+  /* Remove the padding we set earlier */
+  .header,
+  .marketing,
+  .footer {
+    padding-right: 0;
+    padding-left: 0;
+  }
+  /* Space out the masthead */
+  .header {
+    margin-bottom: 30px;
+  }
+  /* Remove the bottom border on the jumbotron for visual effect */
+  .jumbotron {
+    border-bottom: 0;
+  }
+}

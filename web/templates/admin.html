@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+{% if settings['tournament_active'] == 'false' %}
+  <form name="ActiveGame" method="post">
+	<div class="form-group">
+		<label for="active_game">Active Game</label>
+    <select name="active_game" class="form-control">
+      {% for g in games %}
+      <option value="{{ g['id'] }}" {{ 'selected' if g['id'] == settings['active_game'] | int }}>{{ g['name'] }}</option>
+      {% endfor %}
+    </select>
+	</div>
+
+	<div class="form-group">
+	    <label for="send_sms">Send SMS</label>
+      <select name="send_sms" class="form-control">
+        <option value="true" {{ 'selected' if settings['send_sms'] == 'true' }}>Yes</option>
+        <option value="false" {{ 'selected' if settings['send_sms'] == 'false' }}>No</option>
+      </select>
+	</div>
+
+	<div class="form-group">
+    <input type="submit" value="Update" class="btn btn-large btn-info" />
+	</div>
+	</form>
+	<div class="form-group">
+    <a href="/admin/start_tournament" class="btn btn-lg btn-success">Start Tournament</a>
+	</div>
+	</form>
+{% else %}
+<div class="jumbotron">
+  {{ test }}
+	<h3>Active Game: {{ active_game['name'] }}</h3>
+  <p>Select the winner in the curently active match to advance the tournament. <b>This cannot be undone!</b></p>
+  {% if settings['game_over'] == 'false' %}
+  <table class="table">
+    <tr>
+      <td><h2 align="center"><a href="/tournaments/driver/{{ player1['id'] }}"><img src="/static/img/avatars/{{ player1['image'] }}.jpg" /><br>{{ player1['name'] }}</a></h2></td>
+      <td valign="bottom"><h2 style="margin:50px">VS</h2></td>
+      <td><h2 align="center"><a href="/tournaments/driver/{{ player2['id'] }}"><img src="/static/img/avatars/{{ player2['image'] }}.jpg" /><br>{{ player2['name'] }}</a></h2></td>
+    </tr>
+    <tr>
+      <td><a href="/admin/winner/{{ player1['id'] }}" class="btn btn-block btn-primary">WINNER</a></td>
+      <td><h2 align="center" class="text-primary">{{ settings['active_cup'] }} Cup</h2></td>
+      <td><a href="/admin/winner/{{ player2['id'] }}" class="btn btn-block btn-primary">WINNER</a></td>
+    </tr>
+  </table>
+  {% else %}
+    {% set winner = namespace() %}
+    {% if match[0]['score'] > match[1]['score'] %}
+      {% set winner = player1 %}
+    {% else %}
+      {% set winner = player2 %}
+    {% endif %}
+    <h2 class="text-success"><img src="/static/img/avatars/{{ winner['image'] }}.jpg" class="mt-4"/><br><br>{{ winner['name'] }} is the Winner!</h2>
+  {% endif %}
+</div>
+<div class="form-group mt-4">
+  <a href="/admin/stop_tournament" class="btn btn-lg btn-success">Stop Tournament</a>
+</div>
+{% endif %}
+{% endblock %}

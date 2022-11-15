@@ -1,55 +1,71 @@
 ## Mario Kart Tournament
 
-This is a simple web app that allows for the administration of a Mario Kart Tournament. The app consists of a page for end users to setup their driver and enter scores, a scoreboard to view the current racers and totals, and an admin page for administration. 
+This is a simple web app that allows for the administration of a Mario Kart Tournament. The app consists of a page for end users to setup their driver, a scoreboard to view the current racer with a bracket, plus an admin page for administration.
 
-### Features
+## Install
 
-__Configurable Game__
+Clone the repository and download the required libraries. Note that `sudo` is needed since we'll need root to bind to a socket later.
 
-Select which Mario Kart game you're using. This allows the app to randomly pick which cup the drivers will play as well as double check score entries against max possible score for that game. 
+```
+git clone https://github.com/robweber/mario-kart-tournament.git
+cd mario-kart-tournament
+sudo pip3 install -r requirements.txt
+```
 
-__Configurable Rounds__
+You'll also need to make a copy of the database to avoid messing the original version. The webservice expects to find it in a specific path.
 
-Configure how many rounds each player will play when setting up the tournament. 
+```
+cp mario-kart-tournment.db mario-kart-tournment.live.db
+```
 
-__Configurable Handicap__
+## Usage
+Once the required features have been installed you can run the program with default options to start the web service on port 5000.
 
-You can set a handicap to seperate normal from advanced players. This will multiply the normal players score by what you enter. Put 1 here for no handicap. 
-
-### Play
-
-Drivers can only be created before the tournament is activated. Once the tournment is turned on in the Admin area you cannot add more drivers to the races. Turning the tournament off before it is completed will erase all scores. 
-
-Once the tournament is turned on drivers will be randomly matched up for play. The app will also randomly select which cup in the Mario Kart game they will play against. Only advanced players can get "Special Cup" races. 
-
-After the race is complete drivers can enter their score by using the driver URL to login as their player and enter the score. The scoreboard page refreshes every 10 seconds to keep current racers and scores up to date. Once both players have entered their score the next two racers and their cup are selected. If only one racer remains that driver will show a question mark as their opponent. This is meant to allow anyone to play against them with only the listed driver's score being entered. 
-
-Once all rounds have been played for each driver the total is calculated and the winner displayed. 
-
-### Endpoints
-
-* Driver - / or /tournaments will allow you to setup a driver and interact with the tournament
-* Scoreboard - /tournaments/scoreboard to see the scoreboard
-* Admin - /admin
-
-### Install
-
-First install composer
+```
+sudo python3 main.py
 
 ```
 
-php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-php composer-setup.php
-php -r "unlink('composer-setup.php');"
-sudo mv composer.phar /usr/local/bin/composer
+To get a full list of command line arguments you can run:
 
 ```
+python3 main.py -h
+usage: main.py [-h] [-p PORT] [-D]
 
-Then update the project from within the deployment directory
+Mario Kart Tournament
 
+optional arguments:
+  -h, --help            show this help message and exit
+  -p PORT, --port PORT  Port number to run the web server on, 5000 by default
+  -D, --debug           If the program should run in debug mode
 ```
 
-composer update
+## Tournament Setup
 
-```
+To start the tournament the Race Administrator can set the Mario Kart version to be played on the admin page at `/admin`. Once this is set drivers can be added on the main page.
+
+### Adding a Drivers
+
+Drivers can be added as long as the tournament is not started yet. When hitting the main page the currently added drivers will be shown along with a button to create new driver profiles. Once created a driver is ready to play in the tournament.
+
+## Playing the Tournament
+
+When the Race Administrator starts the tournament several things happen at once.
+
+1. Creating new drivers is locked out.
+2. Drivers are randomly seeded into a tournament bracket.
+3. The first set of racers is selected and a Cup is selected from tracks from the active Mario Kart game.
+
+On the scoreboard page racers can see who is up next and the overall status of the tournament via the bracket. Winning drivers are given a score of 1 and losses are a 0. 
+
+### Advancing
+
+On the `/admin` page the Race Administrator can select the winner from the currently active match. Selecting the winner will advance the tournament.
+
+The winning driver will move on to the next race in the bracket and the losing player will drop off. Each driver's win/loss record will also be updated.
+
+## Ending the Tournament
+
+The tournament is over when the final match is played. The winning racer will be shown on both the scoreboard and admin pages. From here the Race Administrator can stop and reset the tournament.
+
+__Note:__ stopping the tournament will cause a complete reset should it be started again. It is not possible to pause and resume.
