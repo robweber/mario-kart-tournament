@@ -2,7 +2,7 @@
 {% block content %}
 <div class="card">
   <div class="card-body" align="left">
-    <p>Currently the tournament is set for <b>{{ active_game['name'] }}</b></p>
+    <p>Currently the tournament is set for <b>{{ active_game.get_description() }}</b></p>
   	<p>The tournament is a single elimination style bracket.</p>
   	<p>Drivers will be randomly matched. </p>
   	<p>The <a href="/tournaments/scoreboard">scoreboard page</a> will show the standings and currently active match. </p>

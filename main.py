@@ -28,7 +28,7 @@ def index():
 
 @app.route('/tournaments/rules', methods=['GET'])
 def rules():
-    return render_template('rules.html', active_page='rules', active_game=db.find_active_game())
+    return render_template('rules.html', active_page='rules', settings=db.load_settings(), active_game=db.find_active_game())
 
 
 @app.route('/tournaments/add_driver', methods=["GET", "POST"])
@@ -154,9 +154,15 @@ def bracket():
 def admin():
     # check if updating the tournament setup
     if request.method == 'POST':
-        # update the sms and active game settings
+        # update the sms and active game settings, reset game mode to none
         db.update_setting('active_game', request.form['active_game'])
         db.update_setting('send_sms', request.form['send_sms'])
+
+        # reset game mode to none if game has changed
+        if(request.form['old_active_game'] != request.form['active_game']):
+            db.update_setting('game_mode', 'none')
+        else:
+            db.update_setting('game_mode', request.form['game_mode'])
 
         flash("Settings Updated")
 
@@ -164,8 +170,10 @@ def admin():
 
     if(settings['tournament_active'] == 'false'):
         # send the settings, the currently active game, and a list of games
-        return render_template('admin.html', active_page='setup', active_game=db.find_active_game(),
-                               settings=settings, games=db.execute_query("select * from games order by name asc"))
+        active_game = db.find_active_game()
+        return render_template('admin.html', active_page='setup', active_game=active_game,
+                               settings=settings, games=db.execute_query("select * from games order by name asc"),
+                               modes=db.execute_query(utils.FIND_DIFFICULTY_QUERY, [active_game.get_id()]))
     else:
         # load the current match
         match = db.execute_query("select * from matches where bracket_level = ? and match_num = ?",
@@ -359,7 +367,7 @@ def update_active_match(player1, player2, level, match, active_game):
     db.update_setting('active_level', level)
 
     # get a cup for them to play
-    cups = db.find_cups(active_game['id'])
+    cups = db.find_cups(active_game.get_id())
     cup_id = random.randint(0, len(cups) - 1)
     db.update_setting('active_cup', cups[cup_id]['name'])
 

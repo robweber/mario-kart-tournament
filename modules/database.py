@@ -6,6 +6,7 @@ https://flask.palletsprojects.com/en/2.2.x/patterns/sqlite3/
 import sqlite3
 from flask import g
 from . import utils
+from .utils import ActiveGame
 
 
 def _get_db():
@@ -74,6 +75,12 @@ def load_settings():
 
     return result
 
+def get_setting(name):
+    """returns the value for a specific named setting"""
+    setting = execute_query("select value from settings where name = ?", [name], True)
+
+    return setting['value']
+
 
 def update_setting(name, value):
     """updates a single setting in the database"""
@@ -81,8 +88,8 @@ def update_setting(name, value):
 
 
 def find_active_game():
-    # return the current active game based on selected value
-    return execute_query(utils.ACTIVE_GAME_QUERY, ["active_game"], True)
+    """returns an object representing the currently selected active game"""
+    return ActiveGame(execute_query(utils.ACTIVE_GAME_QUERY, ["active_game"], True), get_setting('game_mode'))
 
 
 def find_driver(id):

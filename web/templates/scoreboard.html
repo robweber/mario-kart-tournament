@@ -41,7 +41,7 @@ function refresh_info(){
 
         announcement = $('<h2>').html('<img src="/static/img/avatars/' + winner.image + '.jpg" class="mt-4" /><br /><br />' + winner.name + ' is the Winner!');
         announcement.addClass('text-success');
-        
+
         match_area.append(announcement);
       }
       else
@@ -99,7 +99,7 @@ function load_bracket(){
 {% endblock %}
 {% block content %}
 <div class="jumbotron">
-	<h2>{{ active_game['name'] }} Tournament</h2>
+	<h2>{{ active_game.get_description() }} Tournament</h2>
 	{% if settings['tournament_active'] == 'false' %}
 		<h2><a href="/tournaments/add_driver" class="label label-warning">Tournament hasn't started - create your driver!</a></h2>
 	{% else %}

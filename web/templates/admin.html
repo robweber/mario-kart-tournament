@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 {% if settings['tournament_active'] == 'false' %}
+<p>Set the Mario Kart version and game mode being used for the tournament. You can set the game mode to none if you don't wish to use this setting. If changing the game to a different version the mode will default back to none as not all games have the same difficulty modes available. </p>
   <form name="ActiveGame" method="post">
+  <input type="hidden" name="old_active_game" value="{{ settings['active_game'] }}" />
 	<div class="form-group">
 		<label for="active_game">Active Game</label>
     <select name="active_game" class="form-control">
@@ -10,6 +12,16 @@
       {% endfor %}
     </select>
 	</div>
+
+  <div class="form-group">
+      <label for="game_mode">Game Mode</label>
+      <select name="game_mode" class="form-control">
+        <option value="none" {{ 'selected' if settings['game_mode'] == 'none' }}>Not Used</option>
+        {% for m in modes %}
+        <option value="{{ m['name'] }}" {{ 'selected' if m['name'] == settings['game_mode'] }}>{{ m['name'] }}</option>
+        {% endfor %}
+      </select>
+  </div>
 
 	<div class="form-group">
 	    <label for="send_sms">Send SMS</label>
@@ -30,7 +42,7 @@
 {% else %}
 <div class="jumbotron">
   {{ test }}
-	<h3>Active Game: {{ active_game['name'] }}</h3>
+	<h3>Active Game: {{ active_game.get_description() }}</h3>
   <p>Select the winner in the curently active match to advance the tournament. <b>This cannot be undone!</b></p>
   {% if settings['game_over'] == 'false' %}
   <table class="table">
