@@ -34,6 +34,6 @@ class ActiveGame:
 
         # append the game mode if applicable
         if(self.game_mode != "none"):
-            result = " ".join([self.game_mode, result])
+            result = f"{result} ({self.game_mode})"
 
         return result
