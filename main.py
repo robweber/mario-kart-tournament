@@ -346,7 +346,7 @@ def drivers():
 
 @app.route('/admin/delete_driver/<id>', methods=['GET'])
 def delete_driver(id):
-    db.execute_update("delete from drivers where id = ?", id)
+    db.execute_update("delete from drivers where id = ?", [id])
     flash('Driver Deleted')
 
     return redirect(url_for('drivers'))
