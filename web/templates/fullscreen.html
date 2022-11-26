@@ -1,0 +1,38 @@
+{% set page_title = page_title | default('Mario Kart Tournament') %}
+{% set active_page = active_page | default('home') %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{ page_title }}</title>
+  <link rel="shortcut icon" href="/static/favicon.ico">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/static/css/jumbotron-narrow.css" />
+  <script src="/static/js/jquery.1.12.4.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+
+	{% block header %}{% endblock %}
+</head>
+<body>
+	<div class="container">
+		<div align="center">
+			<div id="content">
+        {% for category,message in get_flashed_messages(with_categories=true) %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+				{% block content %}{% endblock %}
+			</div>
+		</div>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        // unique page functions to load here
+        {% block onload_scripts %}{% endblock %}
+      });
+    </script>
+		<footer class="footer">
+        	<p>Created By Rob Weber</p>
+      </footer>
+	</div>
+</body>
+</html>
