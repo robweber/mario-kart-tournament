@@ -213,6 +213,7 @@ def login():
     # if login fails display the pin page again
     return render_template('pin.html', active_page='none')
 
+
 @app.route('/admin/start_tournament', methods=['GET'])
 def start_tournament():
     if('is_admin' not in session):
