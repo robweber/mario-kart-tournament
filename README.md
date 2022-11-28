@@ -19,7 +19,7 @@ cp mario-kart-tournment.db mario-kart-tournment.live.db
 ```
 
 ## Usage
-Once the required features have been installed you can run the program with default options to start the web service on port 5000.
+Once the required features have been installed you can run the program with default options to start the web service on port 5000. Access it via a browser with `http://server_ip:5000/`.
 
 ```
 sudo python3 main.py
@@ -42,7 +42,7 @@ optional arguments:
 
 ## Tournament Setup
 
-To start the tournament the Race Administrator can set the Mario Kart version to be played on the admin page at `/admin`. Once this is set drivers can be added on the main page.
+To setup the tournament the Race Administrator can set the Mario Kart version to be played on the admin page at `http://server_ip:5000/admin`. Once this is set drivers can be added on the main page. Once the tournament is started drivers can no longer be added so only use this once you are ready to race.
 
 ### Adding a Drivers
 
@@ -56,11 +56,11 @@ When the Race Administrator starts the tournament several things happen at once.
 2. Drivers are randomly seeded into a tournament bracket.
 3. The first set of racers is selected and a Cup is selected from tracks from the active Mario Kart game.
 
-On the scoreboard page racers can see who is up next and the overall status of the tournament via the bracket. Winning drivers are given a score of 1 and losses are a 0. 
+On the scoreboard page racers can see who is up next and the overall status of the tournament via the bracket. Winning drivers are given a score of 1 and losses are a 0. Entering Fullscreen Mode removes the top nav bar for easier display on a large screen. The scoreboard page will automatically refresh data every 10 seconds.
 
 ### Advancing
 
-On the `/admin` page the Race Administrator can select the winner from the currently active match. Selecting the winner will advance the tournament.
+On the `/admin` page the Race Administrator can select the winner from the currently active match. Selecting the winner will advance the tournament. This will update the scoreboard page within 10 seconds. 
 
 The winning driver will move on to the next race in the bracket and the losing player will drop off. Each driver's win/loss record will also be updated.
 
