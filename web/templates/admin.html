@@ -4,6 +4,13 @@
 <p>Set the Mario Kart version and game mode being used for the tournament. You can set the game mode to none if you don't wish to use this setting. If changing the game to a different version the mode will default back to none as not all games have the same difficulty modes available. </p>
   <form name="ActiveGame" method="post">
   <input type="hidden" name="old_active_game" value="{{ settings['active_game'] }}" />
+  <input type="hidden" name="old_admin_pin" value="{{ settings['admin_pin'] }}" />
+
+  <div class="form-group">
+      <label for="game_mode">Admin Area PIN (set as blank to disable)</label>
+      <input type="text" name="admin_pin" value="{{ settings['admin_pin'] }}" class="form-control" />
+  </div>
+
 	<div class="form-group">
 		<label for="active_game">Active Game</label>
     <select name="active_game" class="form-control">
@@ -32,11 +39,11 @@
 	</div>
 
 	<div class="form-group">
-    <input type="submit" value="Update" class="btn btn-large btn-info" />
+    <input type="submit" value="Update Settings" class="btn btn-large btn-info" />
 	</div>
 	</form>
 	<div class="form-group">
-    <a href="/admin/start_tournament" class="btn btn-lg btn-success">Start Tournament</a>
+    <a href="/admin/start_tournament" class="btn btn-lg btn-success mt-4">Start Tournament</a>
 	</div>
 	</form>
 {% else %}

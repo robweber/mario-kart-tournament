@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<form name="Pin" method="post" action="/admin/pin">
+<div class="row mb-2">
+  <div class="col-md-4">
+  </div>
+  <div class="col-md-4">
+    <p><b>Admin PIN</b></p>
+    <input type="text" name="admin_pin" value="" class="form-control" />
+  </div>
+  <div class="col-md-4">
+  </div>
+</div>
+<div class="row mb-2">
+  <div class="col-md-4">
+  </div>
+  <div class="col-md-4">
+      <input type="submit" value="Submit" class="btn btn-large btn-primary" />
+  </div>
+  <div class="col-md-4">
+  </div>
+</div>
+</form>
+{% endblock %}

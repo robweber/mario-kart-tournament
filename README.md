@@ -45,6 +45,8 @@ optional arguments:
 
 To setup the tournament the Race Administrator can set the Mario Kart version to be played on the admin page at `http://server_ip:5000/admin`. Once this is set drivers can be added on the main page. Once the tournament is started drivers can no longer be added so only use this once you are ready to race.
 
+To safeguard the admin page you can set a PIN that needs to be entered before entering the admin area. By default this is disabled but does help maintain control over the tournament if you're going to have others access the scoreboard and driver setup pages directly. 
+
 ### Adding a Drivers
 
 Drivers can be added as long as the tournament is not started yet. When hitting the main page the currently added drivers will be shown along with a button to create new driver profiles. Once created a driver is ready to play in the tournament.

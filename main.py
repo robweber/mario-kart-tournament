@@ -5,7 +5,7 @@ import random
 import sys
 import modules.utils as utils
 import modules.database as db
-from flask import Flask, jsonify, render_template, request, url_for, flash, redirect
+from flask import Flask, session, jsonify, render_template, request, url_for, flash, redirect
 
 # create the web service
 app = Flask(import_name="mario-kart-tournament", static_folder=os.path.join(utils.DIR_PATH, 'web', 'static'),
@@ -156,7 +156,8 @@ def bracket():
 def admin():
     # check if updating the tournament setup
     if request.method == 'POST':
-        # update the sms and active game settings, reset game mode to none
+        # update settings, reset game mode to none
+        db.update_setting('admin_pin', request.form['admin_pin'])
         db.update_setting('active_game', request.form['active_game'])
         db.update_setting('send_sms', request.form['send_sms'])
 
@@ -166,9 +167,16 @@ def admin():
         else:
             db.update_setting('game_mode', request.form['game_mode'])
 
+        # logout the admin user if pin changed
+        if(request.form['admin_pin'] != request.form['old_admin_pin']):
+            session.pop('is_admin', None)
+
         flash("Settings Updated")
 
     settings = db.load_settings()
+
+    if('is_admin' not in session):
+        return redirect(url_for('login'))
 
     if(settings['tournament_active'] == 'false'):
         # send the settings, the currently active game, and a list of games
@@ -185,8 +193,31 @@ def admin():
                                player1=db.find_driver(settings['player_1']), player2=db.find_driver(settings['player_2']), match=match)
 
 
+@app.route('/admin/pin', methods=['GET', 'POST'])
+def login():
+    # check the admin pin
+    settings = db.load_settings()
+
+    if(settings['admin_pin'].strip() == ''):
+        # ignore the PIN and proceed to the admin page
+        session['is_admin'] = True
+        return redirect(url_for('admin'))
+
+    if request.method == 'POST':
+        if(request.form['admin_pin'] == settings['admin_pin']):
+            session['is_admin'] = True
+            return redirect(url_for('admin'))
+        else:
+            flash('Incorrect PIN', 'error')
+
+    # if login fails display the pin page again
+    return render_template('pin.html', active_page='none')
+
 @app.route('/admin/start_tournament', methods=['GET'])
 def start_tournament():
+    if('is_admin' not in session):
+        return redirect(url_for('login'))
+
     # first update the settings
     db.update_setting('tournament_active', 'true')
     db.update_setting('game_over', 'false')
@@ -283,6 +314,9 @@ def start_tournament():
 
 @app.route('/admin/stop_tournament', methods=['GET'])
 def stop_tournament():
+    if('is_admin' not in session):
+        return redirect(url_for('login'))
+
     # stop the tournament
     db.execute_update("update settings set value=? where name = ?", ['false', 'tournament_active'])
     db.execute_update("delete from matches")
@@ -294,6 +328,9 @@ def stop_tournament():
 
 @app.route('/admin/winner/<winner>', methods=['GET'])
 def advance_tournament(winner):
+    if('is_admin' not in session):
+        return redirect(url_for('login'))
+
     settings = db.load_settings()
 
     # load both drivers
@@ -342,12 +379,18 @@ def advance_tournament(winner):
 
 @app.route('/admin/drivers', methods=['GET'])
 def drivers():
+    if('is_admin' not in session):
+        return redirect(url_for('login'))
+
     drivers = db.execute_query("select * from drivers order by name asc")
     return render_template('drivers.html', active_page='drivers', drivers=drivers)
 
 
 @app.route('/admin/delete_driver/<id>', methods=['GET'])
 def delete_driver(id):
+    if('is_admin' not in session):
+        return redirect(url_for('login'))
+
     db.execute_update("delete from drivers where id = ?", [id])
     flash('Driver Deleted')
 
