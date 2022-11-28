@@ -452,5 +452,6 @@ if(not args.debug):
 
 # run the web app
 logging.info("Welcome to Mario Kart!")
-logging.info("Starting web service")
+logging.info(f"Starting web service at http://IP:{args.port}")
+logging.info(f"Admin page available at http://IP:{args.port}/admin")
 app.run(debug=args.debug, host='0.0.0.0', port=5000, use_reloader=False)
