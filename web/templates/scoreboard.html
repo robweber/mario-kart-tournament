@@ -107,6 +107,12 @@ function load_bracket(){
     </div>
 	{% endif %}
 </div>
+{% if scoreboard_template != 'fullscreen.html' %}
+<a href="/tournaments/scoreboard?fullscreen=true" class="btn btn-success float-right mb-2">Fullscreen</a>
+{% endif %}
+<div class="clearfix">
+
+</div>
 <a name="bracket"></a>
 <div id="tournament_bracket" align="left">
 
