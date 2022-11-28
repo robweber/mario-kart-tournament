@@ -1,6 +1,7 @@
 import argparse
 import logging
 import os.path
+import math
 import random
 import sys
 import modules.utils as utils
@@ -234,8 +235,8 @@ def start_tournament():
     drivers = db.execute_query('select * from drivers order by RANDOM()')
     match_count = len(drivers)
 
-    # first round players are a multiple of 4
-    while match_count % 4 != 0:
+    # first round matches must be a power of 2
+    while not math.log2(match_count).is_integer():
         match_count = match_count + 1
 
     top_next = True
