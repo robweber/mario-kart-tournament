@@ -75,6 +75,7 @@ def load_settings():
 
     return result
 
+
 def get_setting(name):
     """returns the value for a specific named setting"""
     setting = execute_query("select value from settings where name = ?", [name], True)

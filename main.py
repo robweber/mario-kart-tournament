@@ -60,7 +60,7 @@ def view_driver(id):
 def scoreboard():
     template = 'base.html' if 'fullscreen' not in request.args.keys() else "fullscreen.html"
     return render_template('scoreboard.html', scoreboard_template=template,
-                            settings=db.load_settings(), active_game=db.find_active_game())
+                           settings=db.load_settings(), active_game=db.find_active_game())
 
 
 @app.route('/tournaments/current_match', methods=['GET'])

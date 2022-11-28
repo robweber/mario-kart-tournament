@@ -1,4 +1,5 @@
-## Mario Kart Tournament
+# Mario Kart Tournament
+[![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
 
 This is a simple web app that allows for the administration of a Mario Kart Tournament. The app consists of a page for end users to setup their driver, a scoreboard to view the current racer with a bracket, plus an admin page for administration.
 
@@ -60,7 +61,7 @@ On the scoreboard page racers can see who is up next and the overall status of t
 
 ### Advancing
 
-On the `/admin` page the Race Administrator can select the winner from the currently active match. Selecting the winner will advance the tournament. This will update the scoreboard page within 10 seconds. 
+On the `/admin` page the Race Administrator can select the winner from the currently active match. Selecting the winner will advance the tournament. This will update the scoreboard page within 10 seconds.
 
 The winning driver will move on to the next race in the bracket and the losing player will drop off. Each driver's win/loss record will also be updated.
 
