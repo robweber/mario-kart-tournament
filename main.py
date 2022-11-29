@@ -299,7 +299,7 @@ def start_tournament():
         i = i + 1
 
     # create the rest of the matches (unknown drivers)
-    games_left = len(drivers)
+    games_left = match_count
     current_level = 1
     if games_left % 2 == 1:
         # account for bye
