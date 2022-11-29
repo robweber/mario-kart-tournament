@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Added
 
 - added template service file and instructions to run app as a systemd service
+- button to delete all drivers in admin
 
 ### Changed
 

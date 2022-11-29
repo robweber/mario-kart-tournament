@@ -393,8 +393,14 @@ def delete_driver(id):
     if('is_admin' not in session):
         return redirect(url_for('login'))
 
-    db.execute_update("delete from drivers where id = ?", [id])
-    flash('Driver Deleted')
+    if(int(id) > 0):
+        # delete a specific driver
+        db.execute_update("delete from drivers where id = ?", [id])
+        flash('Driver Deleted')
+    else:
+        # delete all the drivers
+        db.execute_update('delete from drivers')
+        flash('All Drivers Deleted')
 
     return redirect(url_for('drivers'))
 

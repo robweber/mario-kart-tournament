@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
+{% if settings['tournament_active'] == 'false' %}
+<a href="/admin/delete_driver/-1" class="btn btn-danger btn-sm float-right mb-2">Delete All</a>
+<div class="clearfix"></div>
+{% endif %}
 <table class="table table-striped table-hover">
 	<thead>
 		<th></th>
