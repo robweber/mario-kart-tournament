@@ -90,12 +90,17 @@ def update_setting(name, value):
 
 def find_active_game():
     """returns an object representing the currently selected active game"""
-    return ActiveGame(execute_query(utils.ACTIVE_GAME_QUERY, ["active_game"], True), get_setting('game_mode'))
+    return ActiveGame(execute_query(utils.ACTIVE_GAME_QUERY, ["active_game"], True), get_setting('game_mode'), get_setting('selected_cups'))
 
 
 def find_driver(id):
     return execute_query("select * from drivers where id = ?", [id], True)
 
 
-def find_cups(game_id):
-    return execute_query(utils.FIND_CUPS_QUERY, [game_id])
+def find_all_cups(game_id):
+    return execute_query(utils.FIND_ALL_CUPS_QUERY, [game_id])
+
+def find_selected_cups(game_id, cup_list):
+    all_cups = find_all_cups(game_id)
+    # filter the list by the cups we want
+    return list(filter(lambda c: c['id'] in cup_list, all_cups))

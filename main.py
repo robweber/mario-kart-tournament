@@ -1,4 +1,5 @@
 import argparse
+import json
 import logging
 import os.path
 import math
@@ -162,11 +163,29 @@ def admin():
         db.update_setting('active_game', request.form['active_game'])
         db.update_setting('send_sms', request.form['send_sms'])
 
-        # reset game mode to none if game has changed
+        cups = []
+
+        # reset game mode and cups if game has changed
         if(request.form['old_active_game'] != request.form['active_game']):
             db.update_setting('game_mode', 'none')
+
+            # select all cups from the new game
+            new_game_cups = db.find_all_cups(request.form['active_game'])
+            for c in new_game_cups:
+                cups.append(int(c['id']))
+
         else:
             db.update_setting('game_mode', request.form['game_mode'])
+
+            # update the selected cups list
+            for c_id in request.form.getlist('game_cups'):
+                cups.append(int(c_id))
+
+            if(len(cups) == 0):
+                # have to have at least one cup selected
+                cups = [1]
+
+        db.update_setting('selected_cups', json.dumps(cups))
 
         # logout the admin user if pin changed
         if(request.form['admin_pin'] != request.form['old_admin_pin']):
@@ -184,7 +203,8 @@ def admin():
         active_game = db.find_active_game()
         return render_template('admin.html', active_page='setup', active_game=active_game,
                                settings=settings, games=db.execute_query("select * from games order by name asc"),
-                               modes=db.execute_query(utils.FIND_DIFFICULTY_QUERY, [active_game.get_id()]))
+                               modes=db.execute_query(utils.FIND_DIFFICULTY_QUERY, [active_game.get_id()]),
+                               cups=db.find_all_cups(active_game.get_id()))
     else:
         # load the current match
         match = db.execute_query("select * from matches where bracket_level = ? and match_num = ?",
@@ -420,7 +440,7 @@ def update_active_match(player1, player2, level, match, active_game):
     db.update_setting('active_level', level)
 
     # get a cup for them to play
-    cups = db.find_cups(active_game.get_id())
+    cups = db.find_selected_cups(active_game.get_id(), active_game.get_cups())
     cup_id = random.randint(0, len(cups) - 1)
     db.update_setting('active_cup', cups[cup_id]['name'])
 

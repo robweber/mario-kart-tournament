@@ -21,6 +21,15 @@
 	</div>
 
   <div class="form-group">
+      <label for="game_mode">Selected Cups</label>
+      <select name="game_cups" class="form-control" multiple>
+        {% for c in cups %}
+        <option value="{{ c['id'] }}" {{ 'selected' if active_game.cup_selected(c['id']) }}>{{ c['name'] }}</option>
+        {% endfor %}
+      </select>
+  </div>
+
+  <div class="form-group">
       <label for="game_mode">Game Mode</label>
       <select name="game_mode" class="form-control">
         <option value="none" {{ 'selected' if settings['game_mode'] == 'none' }}>Not Used</option>

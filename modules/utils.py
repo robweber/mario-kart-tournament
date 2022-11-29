@@ -1,3 +1,4 @@
+import json
 import os
 
 
@@ -13,15 +14,16 @@ AVATARS = ['baby_daisy', 'baby_luigi', 'baby_mario', 'baby_peach', 'baby_rosalin
 # some pre-canned queries to avoid re-typeing
 ACTIVE_GAME_QUERY = "select id, name from games where id = (select value from settings where name = ?)"
 CREATE_MATCH_STATEMENT = "insert into matches (driver_id, bracket_level, match_num, score) values (?, ?, ?, -1)"
-FIND_CUPS_QUERY = "select cups.name as name from cups join game_cup on cups.id = game_cup.cup_id join games on games.id = game_cup.game_id where games.id = ?"  # noqa
+FIND_ALL_CUPS_QUERY = "select cups.id as id, cups.name as name from cups join game_cup on cups.id = game_cup.cup_id join games on games.id = game_cup.game_id where games.id = ? order by cups.id asc"  # noqa
 FIND_DIFFICULTY_QUERY = "select difficulty_modes.name as name from difficulty_modes join game_difficulty on difficulty_modes.id = game_difficulty.mode_id join games on games.id = game_difficulty.game_id where games.id = ?"  # noqa
 
 
 class ActiveGame:
 
-    def __init__(self, game_obj, game_mode):
+    def __init__(self, game_obj, game_mode, selected_cups):
         self.game_obj = game_obj
         self.game_mode = game_mode
+        self.cups = json.loads(selected_cups)
 
     def get_id(self):
         return self.game_obj['id']
@@ -37,3 +39,9 @@ class ActiveGame:
             result = f"{result} ({self.game_mode})"
 
         return result
+
+    def get_cups(self):
+        return self.cups
+
+    def cup_selected(self, id):
+        return id in self.cups
