@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ## Version 2.3
 
+### Added
+
+- added template service file and instructions to run app as a systemd service
+
 ### Changed
 
 - moved Python lib requirement files to `install` directory

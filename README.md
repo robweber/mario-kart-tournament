@@ -23,7 +23,7 @@ Clone the repository and download the required libraries. Note that `sudo` is ne
 ```
 git clone https://github.com/robweber/mario-kart-tournament.git
 cd mario-kart-tournament
-sudo pip3 install -r install/requirements.txt
+sudo -H pip3 install -r install/requirements.txt
 ```
 
 You'll also need to make a copy of the database to avoid messing with the original version. The webservice expects to find it in a specific path.
@@ -53,6 +53,22 @@ optional arguments:
   -h, --help            show this help message and exit
   -p PORT, --port PORT  Port number to run the web server on, 5000 by default
   -D, --debug           If the program should run in debug mode
+```
+
+### Install As Service
+
+There is a template service file `install/mario-kart-tournament.service` that can be modified to run the app as a service on Linux systems that use systemd. First, modify the `WorkingDirectory` variable to point to the absolute path of the `mario-kart-tournament` folder. You can also modify the command line arguments, if needed, in the `ExecStart` command. Install the service with the following commands.
+
+```
+sudo cp install/mario-kart-tournament.service /etc/systemd/system/mario-kart-tournament.service
+sudo chown root:root /etc/systemd/system/mario-kart-tournament.service
+sudo systemctl enable mario-kart-tournament
+
+# start the service
+sudo systemctl start mario-kart-tournament
+
+# stop the Service
+sudo systemctl stop mario-kart-tournament
 ```
 
 ## Tournament Setup
