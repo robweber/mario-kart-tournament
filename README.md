@@ -73,7 +73,9 @@ sudo systemctl stop mario-kart-tournament
 
 ## Tournament Setup
 
-To setup the tournament the Race Administrator can set the Mario Kart version to be played on the admin page at `http://server_ip:5000/admin`. Once this is set drivers can be added on the main page. Once the tournament is started drivers can no longer be added so only use this once you are ready to race.
+To setup the tournament the Race Administrator can set the Mario Kart version to be played on the admin page at `http://server_ip:5000/admin`. The administrator can set the Mario Kart game to be used, as well as what Cups to use for the matches. By default all Cups for the selected game are available; however you can customize this in the menu. Additionally the game mode (50cc, 100cc, etc) can also be set if desired.
+
+Once configured drivers can be added on the main page. Once the tournament is started drivers can no longer be added so only use this once you are ready to race.
 
 To safeguard the admin page you can set a PIN that needs to be entered before entering the admin area. By default this is disabled but does help maintain control over the tournament if you're going to have others access the scoreboard and driver setup pages directly.
 
