@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - web server port argument was not used properly
 - remove consolation round information
 - fixed bracket sizing so it works properly for any number of drivers
+- can't delete driver while tournament is active
 
 ## Version 2.1
 

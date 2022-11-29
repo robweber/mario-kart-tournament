@@ -12,7 +12,11 @@
 			<td><img src="/static/img/avatars/{{ driver['image'] }}.jpg" width="50px" height="50px"/></td>
 			<td class="align-middle">{{ driver['name'] }}</td>
       <td class="align-middle">{{ driver['wins']}}/{{ driver['losses'] }}</td>
-			<td class="align-middle"><a href="/admin/delete_driver/{{ driver['id'] }}" class="text-danger">Delete</a></td>
+			<td class="align-middle">
+        {% if settings['tournament_active'] == 'false' %}
+        <a href="/admin/delete_driver/{{ driver['id'] }}" class="text-danger">Delete</a>
+        {% endif %}
+      </td>
 		</tr>
 {% endfor %}
 </table>

@@ -385,7 +385,7 @@ def drivers():
         return redirect(url_for('login'))
 
     drivers = db.execute_query("select * from drivers order by name asc")
-    return render_template('drivers.html', active_page='drivers', drivers=drivers)
+    return render_template('drivers.html', active_page='drivers', drivers=drivers, settings=db.load_settings())
 
 
 @app.route('/admin/delete_driver/<id>', methods=['GET'])
