@@ -9,11 +9,11 @@ This is a simple web app that allows for the administration of a Mario Kart Tour
 
 - [Install](#install)
 - [Usage](#usage)
-- [Tournament Setup][#tournament-setup]
-  - [Adding Drivers][#adding-drivers]
-- [Playing The Tournament][#playing-the-tournament]
-  - [Advancing][#advancing]
-- [Ending The Tournament][#ending-the-tournament]
+- [Tournament Setup](#tournament-setup)
+  - [Adding Drivers](#adding-drivers)
+- [Playing The Tournament](#playing-the-tournament)
+  - [Advancing](#advancing)
+- [Ending The Tournament](#ending-the-tournament)
 - [License](#license)
 
 ## Install
