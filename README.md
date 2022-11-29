@@ -23,7 +23,7 @@ Clone the repository and download the required libraries. Note that `sudo` is ne
 ```
 git clone https://github.com/robweber/mario-kart-tournament.git
 cd mario-kart-tournament
-sudo pip3 install -r requirements.txt
+sudo pip3 install -r install/requirements.txt
 ```
 
 You'll also need to make a copy of the database to avoid messing with the original version. The webservice expects to find it in a specific path.

@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## Version 2.3
+
+### Changed
+
+- moved Python lib requirement files to `install` directory
+
 ## Version 2.2
 
 ### Added
