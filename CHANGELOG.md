@@ -10,10 +10,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 - added template service file and instructions to run app as a systemd service
 - button to delete all drivers in admin
+- ability to select which cups are a part of the tournament per game
 
 ### Changed
 
 - moved Python lib requirement files to `install` directory
+
+### Fixed
+
+- secondary levels of tournament bracket were not calculating right with some seeds
 
 ## Version 2.2
 
