@@ -100,6 +100,7 @@ def find_driver(id):
 def find_all_cups(game_id):
     return execute_query(utils.FIND_ALL_CUPS_QUERY, [game_id])
 
+
 def find_selected_cups(game_id, cup_list):
     all_cups = find_all_cups(game_id)
     # filter the list by the cups we want
