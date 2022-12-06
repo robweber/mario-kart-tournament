@@ -16,10 +16,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Changed
 
 - moved Python lib requirement files to `install` directory
+- split Mario Kart 8 (Wii U version) from Mario Kart 8 Deluxe (Switch) since Cups are different
 
 ### Fixed
 
 - secondary levels of tournament bracket were not calculating right with some seeds
+- minor layout issues
 
 ## Version 2.2
 
