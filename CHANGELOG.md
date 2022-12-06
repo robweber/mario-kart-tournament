@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 - secondary levels of tournament bracket were not calculating right with some seeds
 - minor layout issues
+- pin entry should be a password field
 
 ## Version 2.2
 
