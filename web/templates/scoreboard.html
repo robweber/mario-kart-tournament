@@ -58,8 +58,8 @@ function refresh_info(){
         player1 = '<h2 align="center"><a href="/tournaments/driver/' + data.player1.id + '"><img src="/static/img/avatars/' + data.player1.image + '.jpg" /><br>' + data.player1.name + '</a></h2>';
         player2 = '<h2 align="center"><a href="/tournaments/driver/' + data.player2.id + '"><img src="/static/img/avatars/' + data.player2.image + '.jpg" /><br>' + data.player2.name + '</a></h2>';
 
-        row1.append(td.clone().append(player1));
-        row1.append(td.clone().append('<h2 style="margin:50px">VS</h2>'));
+        row1.append(td.clone().attr('width','25%').append(player1));
+        row1.append(td.clone().attr('width', '50%').append('<h2 style="margin:50px">VS</h2>'));
         row1.append(td.clone().append(player2));
 
         // display the cup information
