@@ -4,7 +4,7 @@
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg)](https://github.com/RichardLitt/standard-readme)
 [![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
 
-How your own Mario Kart Tournament with this web app. Features include the ability for participants to setup their driver and view the current race. A scoreboard page shows the tournament bracket with an admin interface to control the tournament flow. A database with various Mario Kart games is included to select the game you want to play along with which Cups are available for the competition.
+Host your own Mario Kart Tournament with this web app. Features include the ability for participants to setup their driver and view the current race. A scoreboard page shows the tournament bracket with an admin interface to control the tournament flow. A database with various Mario Kart games is included to select the game you want to play along with which Cups are available for the competition.
 
 ## Table of Contents
 
