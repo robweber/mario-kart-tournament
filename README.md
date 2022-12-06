@@ -17,6 +17,7 @@ How your own Mario Kart Tournament with this web app. Features include the abili
 - [Ending The Tournament](#ending-the-tournament)
 - [FAQ](#faq)
 - [Thanks](#thanks)
+- [Contributing](#contributing)
 - [License](#license)
 
 ## Install
@@ -147,7 +148,7 @@ Special thanks to the [JQuery Bracket Library](https://github.com/teijo/jquery-b
 
 ## Contributing
 
-If you want to expand on this feel free to fork the repo or submit pull requests. No guarantees anything will be merged in but features that enhance the usability, while not being overly specific to a single use case, will be considered. Mario Kart is a family favorite so this project was just something fun for family get togethers. 
+If you want to expand on this feel free to fork the repo or submit pull requests. No guarantees anything will be merged in but features that enhance the usability, while not being overly specific to a single use case, will be considered. Mario Kart is a family favorite so this project was just something fun for family get togethers.
 
 ## License
 

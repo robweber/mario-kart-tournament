@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - button to delete all drivers in admin
 - ability to select which cups are a part of the tournament per game
 - added more character avatars
+- screenshot to top of README
 
 ### Changed
 
