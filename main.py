@@ -274,7 +274,7 @@ def start_tournament():
             if got_two:
                 top_bracket = top_bracket + 1
                 got_two = False
-                top_next = False
+                top_next = False if (len(drivers) - (i + 1)) >= 4 else True
             else:
                 # will be true next time
                 got_two = True
@@ -284,7 +284,7 @@ def start_tournament():
             if got_two:
                 bottom_bracket = bottom_bracket - 1
                 got_two = False
-                top_next = True
+                top_next = True if (len(drivers) - (i + 1)) >= 4 else False
             else:
                 # will be true next time
                 got_two = True

@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - more driver avatars
 - added Rock and Moon cups from Mario Kart 8 Wave 3 release
 
+### Fixed
+
+- attempted fix for unbalanced brackets, could probably refine this further
+
 ## Version 2.3
 
 ### Added
