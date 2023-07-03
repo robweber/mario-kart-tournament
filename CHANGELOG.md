@@ -4,7 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
-## Unreleased
+## Version 2.5
+
+### Added
+
+- added Wave 4 DLC Tracks for Mario Kart 8 Delux Booster Pass
 
 ### Fixed
 
