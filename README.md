@@ -140,7 +140,7 @@ These were deemed the best for tournament play (by me) since they were available
 
 5. In Mario Kart 8 Deluxe I don't have all the Cups listed.
 
-Mario Kart 8 Deluxe for the Switch is a bit of an outlier in that it has additional "pay to play" type bonus tracks called the [Booster Course Pass](booster-course-pass). You have to either pay for these outright or subscribe to Nintendo's Online membership system. If you don't have these Cups available simply deselect them from play prior to starting the tournament.
+Mario Kart 8 Deluxe for the Switch is a bit of an outlier in that it has additional "pay to play" type bonus tracks called the [Booster Course Pass](https://mariokart8.nintendo.com/booster-course-pass/). You have to either pay for these outright or subscribe to Nintendo's Online membership system. If you don't have these Cups available simply deselect them from play prior to starting the tournament.
 
 ## Thanks
 
