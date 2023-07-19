@@ -3,7 +3,9 @@ Most of this adapted from the Flask SQLite documentation:
 https://flask.palletsprojects.com/en/2.2.x/patterns/sqlite3/
 
 """
+import logging
 import sqlite3
+import os.path
 from flask import g
 from . import utils
 from .utils import ActiveGame
@@ -13,7 +15,27 @@ def _get_db():
     # open a database connection if there isn't one already
     db = getattr(g, '_database', None)
     if db is None:
+
+        # do we need to create the DB
+        create_db = not os.path.exists(utils.DATABASE_PATH)
+
+        # open DB connection
         db = g._database = sqlite3.connect(utils.DATABASE_PATH)
+
+        # create the database table structure
+        if(create_db):
+            logging.info("creating new database")
+
+            # open SQL file, split on each command
+            sql_file = ''
+            with open(os.path.join(utils.DIR_PATH,'install', 'database.sql')) as f:
+                sql_file = f.read().split(";")
+
+            cursor = db.cursor()
+            for command in sql_file:
+                cursor.execute(command)
+            db.commit()
+
         db.row_factory = _make_dicts
     return db
 
