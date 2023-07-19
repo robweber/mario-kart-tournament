@@ -30,11 +30,7 @@ cd mario-kart-tournament
 sudo -H pip3 install -r install/requirements.txt
 ```
 
-You'll also need to make a copy of the database to avoid messing with the original version. The webservice expects to find it in a specific path.
-
-```
-cp mario-kart-tournment.db mario-kart-tournment.live.db
-```
+The database schema resides in `install/database.sql` and an SQLite database is automatically generated if it doesn't exist when the program loads.
 
 ## Usage
 
@@ -121,11 +117,15 @@ I've been running this on Debian type versions of Linux but in theory anything y
 
 In short, no. The bracket is seeded randomly at the start of the tournament. It would be possible to add this as a feature but not something I'm interested in doing. For my use case the random seeding was enough.
 
-3. I selected a different Mario Kart version but the Cup listings are wrong.
+3. I really messed things up, can I recreate the database?
+
+Yes. Delete the `mario-kart-tournament.live.db` file and restart the program. Load the main page and the database will be recreated from scratch.
+
+4. I selected a different Mario Kart version but the Cup listings are wrong.
 
 This is sort of a quirk in the system. Due partly to my own laziness in the setup area the Cup listing is pulled in after a page refresh, not loaded in the background. If you select a new Kart version and hit __Update Settings__ the correct Cups will be populated, as well as the proper Game Modes.
 
-4. The Mario Kart version I wanted is not listed.
+5. The Mario Kart version I wanted is not listed.
 
 Most console versions of Mario Kart are pre-loaded into the database. These include the following:
 
@@ -138,7 +138,7 @@ Most console versions of Mario Kart are pre-loaded into the database. These incl
 
 These were deemed the best for tournament play (by me) since they were available on multiplayer consoles. It is possible to add more games to the database as it's just an SQLite file. You can add it yourself (via SQL) or open an [Issue](https://github.com/robweber/mario-kart-tournament/issues) if you'd like to see one added that doesn't exist.
 
-5. In Mario Kart 8 Deluxe I don't have all the Cups listed.
+6. In Mario Kart 8 Deluxe I don't have all the Cups listed.
 
 Mario Kart 8 Deluxe for the Switch is a bit of an outlier in that it has additional "pay to play" type bonus tracks called the [Booster Course Pass](https://mariokart8.nintendo.com/booster-course-pass/). You have to either pay for these outright or subscribe to Nintendo's Online membership system. If you don't have these Cups available simply deselect them from play prior to starting the tournament.
 
