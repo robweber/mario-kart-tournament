@@ -125,7 +125,9 @@ INSERT INTO "game_cup" VALUES (1,1),
  (6,33),
  (6,34),
  (6,35),
- (6,36);
+ (6,36),
+ (6,37),
+ (6,38);
 INSERT INTO "cups" VALUES (1,'Mushroom'),
  (2,'Flower'),
  (4,'Star'),
@@ -145,7 +147,9 @@ INSERT INTO "cups" VALUES (1,'Mushroom'),
  (33,'Rock'),
  (34,'Moon'),
  (35,'Fruit'),
- (36,'Boomerang');
+ (36,'Boomerang'),
+ (37, 'Feather'),
+ (38, 'Cherry');
 INSERT INTO "difficulty_modes" VALUES (1,'50cc'),
  (2,'100cc'),
  (3,'150cc'),
