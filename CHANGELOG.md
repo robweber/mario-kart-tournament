@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## Version 2.6
+
+### Added
+
+- added `install/database.sql` file. This contains the schema and setup for the default database. 
+
+### Changed
+
+- the database file is now generated automatically at runtime if it doesn't exist
+
+### Removed
+
+- removed the master SQLite template file in favor of using an SQL commands file
+
 ## Version 2.5
 
 ### Added
