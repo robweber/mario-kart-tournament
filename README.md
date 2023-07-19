@@ -130,12 +130,13 @@ There are a few questions, caveats or _gotchas_ that made sense to document as F
 
 >Most console versions of Mario Kart are pre-loaded into the database. These include the following:
 
+>* Super Mario Kart (SNES version)
 >* Mario Kart 64 (Nintendo 64 version)
+>* Mario Kart: Double Dash (Gamecube version)
+>* Mario Kart 7 (Nintendo 3DS)
 >* Mario Kart 8 (Wii U version)
 >* Mario Kart 8 Deluxe (Switch version)
 >* Mario Kart Wii (Wii version)
->* Mario Kart: Double Dash (Gamecube version)
->* Super Mario Kart (SNES version)
 
 >These were deemed the best for tournament play (by me) since they were available on multiplayer consoles. It is possible to add more games to the database as it's just an SQLite file. You can add it yourself (via SQL) or open an [Issue](https://github.com/robweber/mario-kart-tournament/issues) if you'd like to see one added that doesn't exist.
 

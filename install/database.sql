@@ -61,7 +61,8 @@ INSERT INTO "games" VALUES (1,'Mario Kart Wii'),
  (3,'Super Mario Kart - SNES'),
  (4,'Mario Kart: Double Dash!'),
  (6,'Mario Kart 8 Deluxe'),
- (7,'Mario Kart 8');
+ (7,'Mario Kart 8'),
+ (8, 'Mario Kart 7');
 INSERT INTO "settings" VALUES (1,'tournament_active','false'),
  (2,'active_game','1'),
  (3,'player_1','14'),
@@ -127,7 +128,15 @@ INSERT INTO "game_cup" VALUES (1,1),
  (6,35),
  (6,36),
  (6,37),
- (6,38);
+ (6,38),
+ (8,1),
+ (8,2),
+ (8,4),
+ (8,5),
+ (8,6),
+ (8,7),
+ (8,8),
+ (8,9);
 INSERT INTO "cups" VALUES (1,'Mushroom'),
  (2,'Flower'),
  (4,'Star'),
@@ -185,5 +194,9 @@ INSERT INTO "game_difficulty" VALUES (1,1),
  (7,2),
  (7,3),
  (7,4),
- (7,5);
+ (7,5),
+ (8,1),
+ (8,2),
+ (8,3),
+ (8,4);
 COMMIT;

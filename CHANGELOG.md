@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 - added `install/database.sql` file. This contains the schema and setup for the default database.
 - added Wave 5 DLC Tracks for Mario Kart 8 Deluxe Booster Pass
+- added Mario Kart 7 game
 
 ### Changed
 
