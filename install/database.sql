@@ -1,19 +1,19 @@
 BEGIN TRANSACTION;
-DROP TABLE IF EXISTS "games";
-CREATE TABLE IF NOT EXISTS "games" (
+DROP TABLE IF EXISTS "cups";
+CREATE TABLE "cups" (
 	"id"	INTEGER,
 	"name"	TEXT NOT NULL,
+	"type"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
-DROP TABLE IF EXISTS "settings";
-CREATE TABLE IF NOT EXISTS "settings" (
+DROP TABLE IF EXISTS "difficulty_modes";
+CREATE TABLE "difficulty_modes" (
 	"id"	INTEGER,
-	"name"	TEXT NOT NULL,
-	"value"	TEXT NOT NULL,
+	"name"	TEXT,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 DROP TABLE IF EXISTS "drivers";
-CREATE TABLE IF NOT EXISTS "drivers" (
+CREATE TABLE "drivers" (
 	"id"	INTEGER,
 	"name"	TEXT NOT NULL,
 	"phone"	TEXT,
@@ -23,8 +23,26 @@ CREATE TABLE IF NOT EXISTS "drivers" (
 	"active"	TEXT DEFAULT 'false',
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
+DROP TABLE IF EXISTS "game_cup";
+CREATE TABLE "game_cup" (
+	"game_id"	INTEGER,
+	"cup_id"	INTEGER,
+	PRIMARY KEY("game_id","cup_id")
+);
+DROP TABLE IF EXISTS "game_difficulty";
+CREATE TABLE "game_difficulty" (
+	"game_id"	INTEGER,
+	"mode_id"	INTEGER,
+	PRIMARY KEY("game_id","mode_id")
+);
+DROP TABLE IF EXISTS "games";
+CREATE TABLE "games" (
+	"id"	INTEGER,
+	"name"	TEXT NOT NULL,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
 DROP TABLE IF EXISTS "matches";
-CREATE TABLE IF NOT EXISTS "matches" (
+CREATE TABLE "matches" (
 	"id"	INTEGER,
 	"driver_id"	INTEGER,
 	"score"	INTEGER,
@@ -32,49 +50,49 @@ CREATE TABLE IF NOT EXISTS "matches" (
 	"match_num"	INTEGER,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
-DROP TABLE IF EXISTS "game_cup";
-CREATE TABLE IF NOT EXISTS "game_cup" (
-	"game_id"	INTEGER,
-	"cup_id"	INTEGER,
-	PRIMARY KEY("game_id","cup_id")
-);
-DROP TABLE IF EXISTS "cups";
-CREATE TABLE IF NOT EXISTS "cups" (
+DROP TABLE IF EXISTS "settings";
+CREATE TABLE "settings" (
 	"id"	INTEGER,
 	"name"	TEXT NOT NULL,
+	"value"	TEXT NOT NULL,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
-DROP TABLE IF EXISTS "difficulty_modes";
-CREATE TABLE IF NOT EXISTS "difficulty_modes" (
-	"id"	INTEGER,
-	"name"	TEXT,
-	PRIMARY KEY("id" AUTOINCREMENT)
-);
-DROP TABLE IF EXISTS "game_difficulty";
-CREATE TABLE IF NOT EXISTS "game_difficulty" (
-	"game_id"	INTEGER,
-	"mode_id"	INTEGER,
-	PRIMARY KEY("game_id","mode_id")
-);
-INSERT INTO "games" VALUES (1,'Mario Kart Wii'),
- (2,'Mario Kart 64'),
- (3,'Super Mario Kart - SNES'),
- (4,'Mario Kart: Double Dash!'),
- (6,'Mario Kart 8 Deluxe'),
- (7,'Mario Kart 8'),
- (8, 'Mario Kart 7');
-INSERT INTO "settings" VALUES (1,'tournament_active','false'),
- (2,'active_game','1'),
- (3,'player_1','14'),
- (4,'player_2','15'),
- (5,'active_cup','Shell'),
- (6,'game_over','false'),
- (7,'send_sms','false'),
- (8,'active_match','1'),
- (9,'active_level','1'),
- (10,'game_mode','50cc'),
- (11,'admin_pin',''),
- (12,'selected_cups','[1, 2, 4, 5, 6, 7, 8, 9]');
+INSERT INTO "cups" VALUES (1,'Mushroom','Cup'),
+ (2,'Flower','Cup'),
+ (4,'Star','Cup'),
+ (5,'Special','Cup'),
+ (6,'Shell','Cup'),
+ (7,'Banana','Cup'),
+ (8,'Leaf','Cup'),
+ (9,'Lightning','Cup'),
+ (25,'Egg','Cup'),
+ (26,'Triforce','Cup'),
+ (27,'Crossing','Cup'),
+ (28,'Bell','Cup'),
+ (29,'Golden Dash','Cup'),
+ (30,'Lucky Cat','Cup'),
+ (31,'Turnip','Cup'),
+ (32,'Propeller','Cup'),
+ (33,'Rock','Cup'),
+ (34,'Moon','Cup'),
+ (35,'Fruit','Cup'),
+ (36,'Boomerang','Cup'),
+ (37,'Feather','Cup'),
+ (38,'Cherry','Cup'),
+ (39,'Golden','Rally'),
+ (40,'Ice','Rally'),
+ (41,'Moon','Rally'),
+ (42,'Spiny','Rally'),
+ (43,'Cherry','Rally'),
+ (44,'Acorn','Rally'),
+ (45,'Cloud','Rally'),
+ (46,'Heart','Rally');
+INSERT INTO "difficulty_modes" VALUES (1,'50cc'),
+ (2,'100cc'),
+ (3,'150cc'),
+ (4,'Mirror Mode'),
+ (5,'200cc'),
+ (6,'Extra');
 INSERT INTO "game_cup" VALUES (1,1),
  (1,2),
  (1,4),
@@ -136,35 +154,23 @@ INSERT INTO "game_cup" VALUES (1,1),
  (8,6),
  (8,7),
  (8,8),
- (8,9);
-INSERT INTO "cups" VALUES (1,'Mushroom'),
- (2,'Flower'),
- (4,'Star'),
- (5,'Special'),
- (6,'Shell'),
- (7,'Banana'),
- (8,'Leaf'),
- (9,'Lightning'),
- (25,'Egg'),
- (26,'Triforce'),
- (27,'Crossing'),
- (28,'Bell'),
- (29,'Golden Dash'),
- (30,'Lucky Cat'),
- (31,'Turnip'),
- (32,'Propeller'),
- (33,'Rock'),
- (34,'Moon'),
- (35,'Fruit'),
- (36,'Boomerang'),
- (37, 'Feather'),
- (38, 'Cherry');
-INSERT INTO "difficulty_modes" VALUES (1,'50cc'),
- (2,'100cc'),
- (3,'150cc'),
- (4,'Mirror Mode'),
- (5,'200cc'),
- (6,'Extra');
+ (8,9),
+ (9,1),
+ (9,2),
+ (9,3),
+ (9,6),
+ (9,7),
+ (9,8),
+ (9,9),
+ (9,5),
+ (9,39),
+ (9,40),
+ (9,41),
+ (9,42),
+ (9,43),
+ (9,44),
+ (9,45),
+ (9,46);
 INSERT INTO "game_difficulty" VALUES (1,1),
  (1,2),
  (1,3),
@@ -198,5 +204,29 @@ INSERT INTO "game_difficulty" VALUES (1,1),
  (8,1),
  (8,2),
  (8,3),
- (8,4);
+ (8,4),
+ (9,1),
+ (9,2),
+ (9,3),
+ (9,4);
+INSERT INTO "games" VALUES (1,'Mario Kart Wii'),
+ (2,'Mario Kart 64'),
+ (3,'Super Mario Kart - SNES'),
+ (4,'Mario Kart: Double Dash!'),
+ (6,'Mario Kart 8 Deluxe'),
+ (7,'Mario Kart 8'),
+ (8,'Mario Kart 7'),
+ (9,'Mario Kart World');
+INSERT INTO "settings" VALUES (1,'tournament_active','false'),
+ (2,'active_game','1'),
+ (3,'player_1','14'),
+ (4,'player_2','15'),
+ (5,'active_cup','Shell'),
+ (6,'game_over','false'),
+ (7,'send_sms','false'),
+ (8,'active_match','1'),
+ (9,'active_level','1'),
+ (10,'game_mode','50cc'),
+ (11,'admin_pin',''),
+ (12,'selected_cups','[1, 2, 4, 5, 6, 7, 8, 9]');
 COMMIT;
