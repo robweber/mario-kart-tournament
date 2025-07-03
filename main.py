@@ -172,7 +172,9 @@ def admin():
             # select all cups from the new game
             new_game_cups = db.find_all_cups(request.form['active_game'])
             for c in new_game_cups:
-                cups.append(int(c['id']))
+                # ignore rallies by default
+                if(c['type'] == 'Cup'):
+                    cups.append(int(c['id']))
 
         else:
             db.update_setting('game_mode', request.form['game_mode'])
