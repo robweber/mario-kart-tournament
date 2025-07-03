@@ -86,7 +86,9 @@ INSERT INTO "cups" VALUES (1,'Mushroom','Cup'),
  (43,'Cherry','Rally'),
  (44,'Acorn','Rally'),
  (45,'Cloud','Rally'),
- (46,'Heart','Rally');
+ (46,'Heart','Rally'),
+ (47,'Acorn','Cup'),
+ (48,'Spiny','Cup');
 INSERT INTO "difficulty_modes" VALUES (1,'50cc'),
  (2,'100cc'),
  (3,'150cc'),
@@ -170,7 +172,9 @@ INSERT INTO "game_cup" VALUES (1,1),
  (9,43),
  (9,44),
  (9,45),
- (9,46);
+ (9,46),
+ (6,47),
+ (6,48);
 INSERT INTO "game_difficulty" VALUES (1,1),
  (1,2),
  (1,3),
