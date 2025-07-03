@@ -4,7 +4,7 @@ Description=Mario Kart Tournament
 [Service]
 User=root
 WorkingDirectory=/home/user/mario-kart-tournament/
-ExecStart=/usr/bin/python3 main.py
+ExecStart=/home/user/mario-kart-tournament/.venv/bin/python3 /home/user/mario-kart-tournament/main.py
 
 [Install]
 WantedBy=multi-user.target

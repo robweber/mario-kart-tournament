@@ -14,7 +14,7 @@ AVATARS = ['baby_daisy', 'baby_luigi', 'baby_mario', 'baby_peach', 'baby_rosalin
 # some pre-canned queries to avoid re-typeing
 ACTIVE_GAME_QUERY = "select id, name from games where id = (select value from settings where name = ?)"
 CREATE_MATCH_STATEMENT = "insert into matches (driver_id, bracket_level, match_num, score) values (?, ?, ?, -1)"
-FIND_ALL_CUPS_QUERY = "select cups.id as id, cups.name as name from cups join game_cup on cups.id = game_cup.cup_id join games on games.id = game_cup.game_id where games.id = ? order by cups.id asc"  # noqa
+FIND_ALL_CUPS_QUERY = "select cups.id as id, cups.name as name, cups.type as type from cups join game_cup on cups.id = game_cup.cup_id join games on games.id = game_cup.game_id where games.id = ? order by cups.id asc"  # noqa
 FIND_DIFFICULTY_QUERY = "select difficulty_modes.name as name from difficulty_modes join game_difficulty on difficulty_modes.id = game_difficulty.mode_id join games on games.id = game_difficulty.game_id where games.id = ?"  # noqa
 
 

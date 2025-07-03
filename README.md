@@ -23,12 +23,19 @@ Host your own Mario Kart Tournament with this web app. Features include the abil
 
 ## Install
 
-Clone the repository and download the required libraries. Note that `sudo` is needed since we'll need root to bind to a socket later. It's assumed you have a working version of Python 3 installed along with [Pip](https://pypi.org/project/pip/).
+Clone the repository and download the required libraries. It's assumed you have a working version of Python 3 installed along with [Pip](https://pypi.org/project/pip/).
 
 ```
 git clone https://github.com/robweber/mario-kart-tournament.git
 cd mario-kart-tournament
-sudo -H pip3 install -r install/requirements.txt
+
+# create a virtual environment
+python3 -m venv --system-site-packages .venv
+source .venv/bin/activate
+
+# download required libs
+pip3 install setuptools -U
+pip3 install -r install/requirements.txt
 ```
 
 The database schema resides in `install/database.sql` and an SQLite database is automatically generated if it doesn't exist when the program loads.
@@ -38,7 +45,7 @@ The database schema resides in `install/database.sql` and an SQLite database is 
 Once the required features have been installed you can run the program with default options to start the web service on port 5000. Access it via a browser with `http://server_ip:5000/`.
 
 ```
-sudo python3 main.py
+python3 main.py
 
 ```
 
@@ -137,12 +144,17 @@ There are a few questions, caveats or _gotchas_ that made sense to document as F
 >* Mario Kart 8 (Wii U version)
 >* Mario Kart 8 Deluxe (Switch version)
 >* Mario Kart Wii (Wii version)
+>* Mario Kart World (Switch 2 version)
 
 >These were deemed the best for tournament play (by me) since they were available on multiplayer consoles. It is possible to add more games to the database as it's just an SQLite file. You can add it yourself (via SQL) or open an [Issue](https://github.com/robweber/mario-kart-tournament/issues) if you'd like to see one added that doesn't exist.
 
 6. In Mario Kart 8 Deluxe I don't have all the Cups listed.
 
 >Mario Kart 8 Deluxe for the Switch is a bit of an outlier in that it has additional "pay to play" type bonus tracks called the [Booster Course Pass](https://mariokart8.nintendo.com/booster-course-pass/). You have to either pay for these outright or subscribe to Nintendo's Online membership system. If you don't have these Cups available simply deselect them from play prior to starting the tournament.
+
+7. Can I run a tournament using Knockout Tours in Mario Kart World? 
+
+>Yes, you can. Mario Kart World has a game mode using rallies that are different from the normal "Grand Prix" mode. Each Rally is a set of tracks you race consecutively with no breaks and players are eliminated at specific checkpoints if you are in the last four places. Running a tournament in Knockout Tour mode just select Mario Kart World as the game. De-select all the Grand Prix Cup races and only highlight the Rally races. When the tournament starts it will select from the list of Rallies for each match-up. 
 
 ## Thanks
 

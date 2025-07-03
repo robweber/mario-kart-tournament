@@ -172,7 +172,9 @@ def admin():
             # select all cups from the new game
             new_game_cups = db.find_all_cups(request.form['active_game'])
             for c in new_game_cups:
-                cups.append(int(c['id']))
+                # ignore rallies by default
+                if(c['type'] == 'Cup'):
+                    cups.append(int(c['id']))
 
         else:
             db.update_setting('game_mode', request.form['game_mode'])
@@ -442,7 +444,7 @@ def update_active_match(player1, player2, level, match, active_game):
     # get a cup for them to play
     cups = db.find_selected_cups(active_game.get_id(), active_game.get_cups())
     cup_id = random.randint(0, len(cups) - 1)
-    db.update_setting('active_cup', cups[cup_id]['name'])
+    db.update_setting('active_cup', f"{cups[cup_id]['name']} {cups[cup_id]['type']}")
 
 
 def find_next_match(level, match):

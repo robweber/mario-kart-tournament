@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
+## Version 2.8
+
+### Added
+
+- Added Mario Kart World information. Both Grand Prix and Knockout Tour races available
+
+### Changed
+
+- changed database to add "type" column for cups. Keeps Cups and Rallies separate
+
 ## Version 2.7
 
 ### Added
