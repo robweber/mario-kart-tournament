@@ -442,7 +442,7 @@ def update_active_match(player1, player2, level, match, active_game):
     # get a cup for them to play
     cups = db.find_selected_cups(active_game.get_id(), active_game.get_cups())
     cup_id = random.randint(0, len(cups) - 1)
-    db.update_setting('active_cup', cups[cup_id]['name'])
+    db.update_setting('active_cup', f"{cups[cup_id]['name']} {cups[cup_id]['type']}")
 
 
 def find_next_match(level, match):

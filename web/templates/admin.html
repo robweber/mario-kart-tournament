@@ -24,7 +24,7 @@
       <label for="game_mode">Selected Cups</label>
       <select name="game_cups" class="form-control" multiple>
         {% for c in cups %}
-        <option value="{{ c['id'] }}" {{ 'selected' if active_game.cup_selected(c['id']) }}>{{ c['name'] }}</option>
+        <option value="{{ c['id'] }}" {{ 'selected' if active_game.cup_selected(c['id']) }}>{{ c['name'] }} {{ c['type'] }}</option>
         {% endfor %}
       </select>
   </div>
@@ -39,6 +39,7 @@
       </select>
   </div>
 
+<!--
 	<div class="form-group">
 	    <label for="send_sms">Send SMS</label>
       <select name="send_sms" class="form-control">
@@ -46,7 +47,8 @@
         <option value="false" {{ 'selected' if settings['send_sms'] == 'false' }}>No</option>
       </select>
 	</div>
-
+-->
+  <input type="hidden" name="send_sms" value="false" />
 	<div class="form-group">
     <input type="submit" value="Update Settings" class="btn btn-large btn-info" />
 	</div>
@@ -69,7 +71,7 @@
     </tr>
     <tr>
       <td><a href="/admin/winner/{{ player1['id'] }}" class="btn btn-block btn-primary">WINNER</a></td>
-      <td><h2 align="center" class="text-primary">{{ settings['active_cup'] }} Cup</h2></td>
+      <td><h2 align="center" class="text-primary">{{ settings['active_cup'] }}</h2></td>
       <td><a href="/admin/winner/{{ player2['id'] }}" class="btn btn-block btn-primary">WINNER</a></td>
     </tr>
   </table>
